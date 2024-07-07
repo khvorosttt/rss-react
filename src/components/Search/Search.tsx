@@ -2,6 +2,7 @@ import { ChangeEvent, Component, ReactNode } from 'react';
 import SearchSection from '../SearchSection/SearchSection';
 import ResultSection from '../ResultSection/ResultSection';
 import Api, { AnimalBody, ResponseBody } from '../../services/api/Api';
+import ErrorBounder from '../ErrorBounder/ErrorBounder';
 
 export default class Search extends Component<
     Record<string, never>,
@@ -47,10 +48,10 @@ export default class Search extends Component<
     render(): ReactNode {
         const { searchResult } = this.state;
         return (
-            <div>
+            <ErrorBounder>
                 <SearchSection inputChange={this.handlerInput} searchButton={this.handleSearchButton} />
                 <ResultSection result={searchResult} />
-            </div>
+            </ErrorBounder>
         );
     }
 }
