@@ -7,7 +7,7 @@ export default class ErrorButton extends Component {
 
     render(): ReactNode {
         return (
-            <button type="button" onClick={ErrorButton.handleClick}>
+            <button className="error-button" type="button" onClick={ErrorButton.handleClick}>
                 Throw error
             </button>
         );

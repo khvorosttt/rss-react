@@ -1,4 +1,4 @@
-interface AnimalBody {
+export interface AnimalBody {
     uid: string;
     name: string;
     earthAnimal: boolean;
