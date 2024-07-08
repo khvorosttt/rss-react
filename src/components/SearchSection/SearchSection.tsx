@@ -4,16 +4,17 @@ import SearchButton from '../SearchButton/SearchButton';
 import ErrorButton from '../ErrorButton/ErrorButton';
 
 export interface SearchProps {
+    searchQuery: string;
     inputChange: (event: ChangeEvent<HTMLInputElement>) => void;
     searchButton: () => void;
 }
 
 export default class SearchSection extends PureComponent<SearchProps> {
     render() {
-        const { inputChange, searchButton } = this.props;
+        const { searchQuery, inputChange, searchButton } = this.props;
         return (
             <div className="search-section">
-                <Input onChange={inputChange} />
+                <Input searchQuery={searchQuery} onChange={inputChange} />
                 <SearchButton onClick={searchButton} />
                 <ErrorButton />
             </div>
