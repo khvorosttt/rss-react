@@ -1,4 +1,5 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import { AnimalBody, ResponseBody, fetchData, PageInfo } from '../../services/api/Api';
 
 export default function useSearchQueryRestore() {
@@ -8,18 +9,27 @@ export default function useSearchQueryRestore() {
     const [pageInfo, setPageInfo] = useState<PageInfo>();
     const [searchResult, setSearchResult] = useState<AnimalBody[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const { pageId } = useParams<{ pageId: string }>();
+    const [currentPage, setCurrentPage] = useState(pageId);
+    const navigate = useNavigate();
 
     const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value.trim());
     };
 
-    const handlerSearchData = async (name: string) => {
-        setIsLoading(true);
-        const data: ResponseBody = await fetchData(name);
-        setSearchResult(data.animals);
-        setPageInfo(data.page);
-        setIsLoading(false);
-    };
+    const handlerSearchData = useCallback(
+        async (name: string, pageNumber: number) => {
+            setIsLoading(true);
+            if (!/^\d+$/.test(pageNumber.toString())) {
+                navigate('/not-found');
+            }
+            const data: ResponseBody = await fetchData(name, pageNumber);
+            setSearchResult(data.animals);
+            setPageInfo(data.page);
+            setIsLoading(false);
+        },
+        [navigate]
+    );
 
     const setSearchValues = () => {
         searchQueryRef.current = inputValue;
@@ -35,23 +45,25 @@ export default function useSearchQueryRestore() {
         } else {
             setSearchQuery('');
         }
-    }, []);
+    }, [searchQuery]);
 
     useEffect(() => {
-        handlerSearchData(searchQueryRef.current);
+        handlerSearchData(searchQueryRef.current, Number(currentPage));
         return () => {
             localStorage.setItem('savedSearch', searchQueryRef.current);
         };
-    }, [searchQuery]);
+    }, [searchQuery, currentPage, handlerSearchData]);
 
     return {
         inputValue,
-        searchQuery,
+        searchQueryRef,
         setSearchQuery,
         setSearchValues,
         handleChangeInput,
+        handlerSearchData,
         searchResult,
         isLoading,
         pageInfo,
+        setCurrentPage,
     };
 }

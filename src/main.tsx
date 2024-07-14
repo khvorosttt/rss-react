@@ -16,6 +16,7 @@ const router = createBrowserRouter([
     {
         path: '/page/:pageId',
         element: <Search />,
+        errorElement: <NotFound />,
         children: [
             {
                 path: '',
