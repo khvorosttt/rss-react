@@ -1,10 +1,11 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import Api, { AnimalBody, ResponseBody } from '../../services/api/Api';
+import { AnimalBody, ResponseBody, fetchData, PageInfo } from '../../services/api/Api';
 
 export default function useSearchQueryRestore() {
     const [inputValue, setInputValue] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const searchQueryRef = useRef('');
+    const [pageInfo, setPageInfo] = useState<PageInfo>();
     const [searchResult, setSearchResult] = useState<AnimalBody[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -14,8 +15,9 @@ export default function useSearchQueryRestore() {
 
     const handlerSearchData = async (name: string) => {
         setIsLoading(true);
-        const data: ResponseBody = await Api.fetchData(name);
+        const data: ResponseBody = await fetchData(name);
         setSearchResult(data.animals);
+        setPageInfo(data.page);
         setIsLoading(false);
     };
 
@@ -42,5 +44,14 @@ export default function useSearchQueryRestore() {
         };
     }, [searchQuery]);
 
-    return { inputValue, searchQuery, setSearchQuery, setSearchValues, handleChangeInput, searchResult, isLoading };
+    return {
+        inputValue,
+        searchQuery,
+        setSearchQuery,
+        setSearchValues,
+        handleChangeInput,
+        searchResult,
+        isLoading,
+        pageInfo,
+    };
 }
