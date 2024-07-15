@@ -1,3 +1,5 @@
+import { LoaderFunction, LoaderFunctionArgs } from 'react-router';
+
 export interface AnimalBody {
     uid: string;
     name: string;
@@ -8,7 +10,7 @@ export interface AnimalBody {
     feline: boolean;
 }
 
-interface PageInfo {
+export interface PageInfo {
     pageNumber: number;
     pageSize: number;
     numberOfElements: number;
@@ -40,10 +42,31 @@ const POSTOptions = (request: string) => {
     };
 };
 
-export default class Api {
-    static async fetchData(animalName: string) {
-        return fetch(`https://stapi.co/api/v1/rest/animal/search`, POSTOptions(animalName)).then((response) =>
-            response.json()
+export async function fetchData(animalName: string, pageNumber: number = 0) {
+    try {
+        const response = await fetch(
+            `https://stapi.co/api/v1/rest/animal/search?pageNumber=${pageNumber}&pageSize=9`,
+            POSTOptions(animalName)
         );
+        const data = await response.json();
+        return data;
+    } catch {
+        throw new Error('Fetch failed');
     }
 }
+
+export const getAnimal: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
+    const url = new URL(request.url);
+    const detailId = url.searchParams.get('detail');
+    try {
+        if (detailId) {
+            const data = await fetch(`https://stapi.co/api/v1/rest/animal?uid=${detailId}`).then((response) =>
+                response.json()
+            );
+            return data;
+        }
+        return null;
+    } catch (error) {
+        throw new Error('Fetch failed');
+    }
+};

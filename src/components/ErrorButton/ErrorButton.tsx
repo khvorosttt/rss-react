@@ -1,28 +1,16 @@
-import { PureComponent, ReactNode } from 'react';
+import { useState } from 'react';
 
-export default class ErrorButton extends PureComponent<Record<string, never>, { hasError: boolean }> {
-    constructor(props: Record<string, never>) {
-        super(props);
-        this.state = {
-            hasError: false,
-        };
-    }
-
-    handleClick = () => {
-        this.setState({
-            hasError: true,
-        });
+export default function ErrorButton() {
+    const [hasError, setHasError] = useState(false);
+    const handleClick = () => {
+        setHasError(true);
     };
-
-    render(): ReactNode {
-        const { hasError } = this.state;
-        if (hasError) {
-            throw new Error('The error eject button was pressed');
-        }
-        return (
-            <button className="error-button" type="button" onClick={this.handleClick}>
-                Throw error
-            </button>
-        );
+    if (hasError) {
+        throw new Error('The error eject button was pressed');
     }
+    return (
+        <button className="error-button" type="button" onClick={handleClick}>
+            Throw error
+        </button>
+    );
 }
