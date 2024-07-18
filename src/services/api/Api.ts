@@ -20,6 +20,10 @@ export interface PageInfo {
     lastPage: boolean;
 }
 
+interface SortInfo {
+    clauses: ClausesInfo[];
+}
+
 interface ClausesInfo {
     name: string;
     direction: 'ASC' | 'DESC';
@@ -28,7 +32,7 @@ interface ClausesInfo {
 
 export interface ResponseBody {
     page: PageInfo;
-    sort: ClausesInfo;
+    sort: SortInfo;
     animals: AnimalBody[];
 }
 

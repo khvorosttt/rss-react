@@ -22,11 +22,12 @@ export default function useSearchQueryRestore() {
             setIsLoading(true);
             if (!/^\d+$/.test(pageNumber.toString())) {
                 navigate('/not-found');
+            } else {
+                const data: ResponseBody = await fetchData(name, pageNumber);
+                setSearchResult(data.animals);
+                setPageInfo(data.page);
+                setIsLoading(false);
             }
-            const data: ResponseBody = await fetchData(name, pageNumber);
-            setSearchResult(data.animals);
-            setPageInfo(data.page);
-            setIsLoading(false);
         },
         [navigate]
     );
