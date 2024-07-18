@@ -1,7 +1,6 @@
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import SearchSection from '../SearchSection/SearchSection';
 import ResultSection from '../ResultSection/ResultSection';
-import ErrorBounder from '../ErrorBounder/ErrorBounder';
 import useSearchQueryRestore from '../../utils/hooks/useSearchQueryRestore';
 import Pagination from '../Pagination/Pagination';
 import './search.css';
@@ -19,19 +18,17 @@ export default function Search() {
     };
 
     return (
-        <ErrorBounder>
-            <div className="search-container">
-                <SearchSection
-                    searchQuery={inputValue}
-                    inputChange={handleChangeInput}
-                    searchButton={handleClickSearchButton}
-                />
-                <div className="result-container">
-                    <ResultSection result={searchResult} isLoading={isLoading} />
-                    <div id="detail">{detailId && <Outlet />}</div>
-                </div>
-                <Pagination setPageNumber={setCurrentPage} pageInfo={pageInfo} />
+        <div className="search-container">
+            <SearchSection
+                searchQuery={inputValue}
+                inputChange={handleChangeInput}
+                searchButton={handleClickSearchButton}
+            />
+            <div className="result-container">
+                <ResultSection result={searchResult} isLoading={isLoading} />
+                <div id="detail">{detailId && <Outlet />}</div>
             </div>
-        </ErrorBounder>
+            <Pagination setPageNumber={setCurrentPage} pageInfo={pageInfo} />
+        </div>
     );
 }

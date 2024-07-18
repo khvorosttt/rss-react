@@ -6,11 +6,12 @@ import NotFound from './components/NotFound/NotFound';
 import CardDetail from './components/CardDetail/CardDetail';
 import { getAnimal } from './services/api/Api';
 import Search from './components/Search/Search';
+import ErrorBounder from './components/ErrorBounder/ErrorBounder';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Navigate to="/page/1" replace />,
+        element: <Navigate to="/page/0" replace />,
         errorElement: <NotFound />,
     },
     {
@@ -30,6 +31,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <ErrorBounder>
+            <RouterProvider router={router} />
+        </ErrorBounder>
     </React.StrictMode>
 );

@@ -22,9 +22,11 @@ export default function ResultSection({ isLoading, result }: ResultProps) {
                 role="button"
                 tabIndex={0}
             >
-                {result.map((value) => {
-                    return <Card key={value.uid} animal={value} pageId={pageId} />;
-                })}
+                {result.length !== 0
+                    ? result.map((value) => {
+                          return <Card key={value.uid} animal={value} pageId={pageId} />;
+                      })
+                    : 'No results were found for your request'}
             </div>
         </Loader>
     );
