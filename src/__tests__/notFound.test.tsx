@@ -1,8 +1,8 @@
 import { Navigate, RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import NotFound from '../components/NotFound/NotFound';
-import Search from '../components/Search/Search';
+import NotFound from '../Page/NotFoundPage/NotFoundPage';
+import Search from '../Page/SearchPage/SearchPage';
 import { getAnimal } from '../services/api/Api';
 import CardDetail from '../components/CardDetail/CardDetail';
 

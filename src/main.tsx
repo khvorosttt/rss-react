@@ -2,28 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import NotFound from './components/NotFound/NotFound';
+import NotFoundPage from './Page/NotFoundPage/NotFoundPage';
 import CardDetail from './components/CardDetail/CardDetail';
 import { getAnimal } from './services/api/Api';
-import Search from './components/Search/Search';
+import SearchPage from './Page/SearchPage/SearchPage';
 import ErrorBounder from './components/ErrorBounder/ErrorBounder';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <Navigate to="/page/0" replace />,
-        errorElement: <NotFound />,
+        errorElement: <NotFoundPage />,
     },
     {
         path: '/page/:pageId',
-        element: <Search />,
-        errorElement: <NotFound />,
+        element: <SearchPage />,
+        errorElement: <NotFoundPage />,
         children: [
             {
                 path: '',
                 loader: getAnimal,
                 element: <CardDetail />,
-                errorElement: <NotFound />,
+                errorElement: <NotFoundPage />,
             },
         ],
     },

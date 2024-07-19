@@ -3,6 +3,7 @@ import { useLoaderData, useNavigate, useParams } from 'react-router';
 import { AnimalBody } from '../../services/api/Api';
 import Loader from '../Loader/Loader';
 import './cardDetail.css';
+import { getFieldStatus } from '../../utils/hooks/constants';
 
 export default function CardDetail() {
     const { animal } = useLoaderData() as { animal: AnimalBody };
@@ -27,11 +28,11 @@ export default function CardDetail() {
                 <div className="card-detail">
                     <h3>Animal</h3>
                     <p>Name: {name}</p>
-                    <p>Earth Animal: {earthAnimal ? 'yes' : 'no'}</p>
-                    <p>Earth Insect: {earthInsect ? 'yes' : 'no'}</p>
-                    <p>Avian: {avian ? 'yes' : 'no'}</p>
-                    <p>Canine: {canine ? 'yes' : 'no'}</p>
-                    <p>Feline: {feline ? 'yes' : 'no'}</p>
+                    <p>Earth Animal: {getFieldStatus(earthAnimal)}</p>
+                    <p>Earth Insect: {getFieldStatus(earthInsect)}</p>
+                    <p>Avian: {getFieldStatus(avian)}</p>
+                    <p>Canine: {getFieldStatus(canine)}</p>
+                    <p>Feline: {getFieldStatus(feline)}</p>
                 </div>
                 <button type="button" className="button-close" onClick={clickCloseHandler}>
                     Close
