@@ -70,4 +70,17 @@ describe('test useSearchQueryRestore hook', () => {
             expect(result.current.pageInfo).toBe(testResponseBody.page);
         });
     });
+
+    it('should save value in localStorage', () => {
+        const { result } = renderHook(() => useSearchQueryRestore());
+        act(() => {
+            result.current.handleChangeInput({
+                target: { value: 'test' },
+            } as React.ChangeEvent<HTMLInputElement>);
+        });
+        act(() => {
+            result.current.setSearchValues();
+        });
+        expect(localStorage.getItem('savedSearch')).toEqual('test');
+    });
 });

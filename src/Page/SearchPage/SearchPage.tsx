@@ -1,10 +1,10 @@
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import SearchSection from '../../components/SearchSection/SearchSection';
 import ResultSection from '../../components/ResultSection/ResultSection';
-import useSearchQueryRestore from '../../utils/hooks/useSearchQueryRestore';
 import Pagination from '../../components/Pagination/Pagination';
 import './searchPage.css';
 import { SearchParams } from '../../utils/hooks/constants';
+import useSearchQueryRestore from '../../utils/hooks/useSearchQueryRestore';
 
 export default function SearchPage() {
     const { inputValue, setSearchValues, handleChangeInput, searchResult, isLoading, pageInfo, setCurrentPage } =
