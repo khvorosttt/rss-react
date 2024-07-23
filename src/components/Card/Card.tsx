@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { AnimalBody } from '../../services/api/Api';
+import { AnimalBody } from '../../services/types';
 import './card.css';
 
 interface CardProps {

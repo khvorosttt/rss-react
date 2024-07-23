@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { PageInfo } from '../../services/api/Api';
+import { PageInfo } from '../../services/types';
 import './pagination.css';
 
 interface PaginationProps {

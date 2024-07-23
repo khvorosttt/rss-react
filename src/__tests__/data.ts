@@ -1,4 +1,4 @@
-import { AnimalBody, PageInfo, ResponseBody } from '../services/api/Api';
+import { AnimalBody, PageInfo, ResponseBody } from '../services/types';
 
 export const testPageInfo: PageInfo = {
     pageNumber: 1,

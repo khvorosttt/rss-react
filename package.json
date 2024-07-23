@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
-        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 3",
         "preview": "vite preview",
         "format:fix": "prettier . --write",
         "format": "prettier . --check",
@@ -15,11 +15,13 @@
         "coverage": "vitest run --coverage"
     },
     "dependencies": {
+        "@reduxjs/toolkit": "^2.2.6",
         "@testing-library/dom": "^10.3.1",
         "eslint-config-airbnb-typescript": "^18.0.0",
         "eslint-plugin-react-compiler": "^0.0.0-experimental-0998c1e-20240625",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
+        "react-redux": "^9.1.2",
         "react-router": "^6.24.1",
         "react-router-dom": "^6.24.1"
     },

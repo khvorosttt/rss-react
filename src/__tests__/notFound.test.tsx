@@ -3,7 +3,6 @@ import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import NotFound from '../Page/NotFoundPage/NotFoundPage';
 import Search from '../Page/SearchPage/SearchPage';
-import { getAnimal } from '../services/api/Api';
 import CardDetail from '../components/CardDetail/CardDetail';
 
 describe('Not Found Page Test', () => {
@@ -21,7 +20,6 @@ describe('Not Found Page Test', () => {
                 children: [
                     {
                         path: '',
-                        loader: getAnimal,
                         element: <CardDetail />,
                         errorElement: <NotFound />,
                     },

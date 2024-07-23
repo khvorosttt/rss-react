@@ -1,29 +1,31 @@
-import { useEffect, useState } from 'react';
-import { useLoaderData, useNavigate, useParams } from 'react-router';
-import { AnimalBody } from '../../services/api/Api';
+import { useNavigate, useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import './cardDetail.css';
-import { getFieldStatus } from '../../utils/hooks/constants';
+import { getFieldStatus, SearchParams } from '../../utils/hooks/constants';
+import { useGetAnimalByIdQuery } from '../../services/api/animalsApi';
 
 export default function CardDetail() {
-    const { animal } = useLoaderData() as { animal: AnimalBody };
-    const { name, earthAnimal, earthInsect, avian, canine, feline } = animal;
-    const [isLoading, setIsLoading] = useState(true);
     const { pageId } = useParams<{ pageId: string }>();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (animal) {
-            setIsLoading(false);
-        }
-    }, [animal]);
+    const [searchParams] = useSearchParams();
+    const detailId = searchParams.get(SearchParams.detail);
+    const { data, isFetching, isError, isSuccess } = useGetAnimalByIdQuery(detailId!);
 
     const clickCloseHandler = () => {
         navigate(`/page/${pageId}`);
     };
 
-    return (
-        <Loader isLoading={isLoading}>
+    if (isFetching) {
+        return <Loader />;
+    }
+
+    if (isError) {
+        return <div>Error loading animal data</div>;
+    }
+    if (isSuccess) {
+        const { name, earthAnimal, earthInsect, avian, canine, feline } = data.animal;
+        return (
             <div className="detail-container">
                 <div className="card-detail">
                     <h3>Animal</h3>
@@ -38,6 +40,6 @@ export default function CardDetail() {
                     Close
                 </button>
             </div>
-        </Loader>
-    );
+        );
+    }
 }
