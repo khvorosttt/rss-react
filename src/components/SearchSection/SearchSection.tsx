@@ -7,6 +7,7 @@ import ErrorButton from '../ErrorButton/ErrorButton';
 import useSearchQueryRestore from '../../utils/hooks/useSearchQueryRestore';
 import { updateAnimals, updateSearchQuery } from '../../services/features/animalsSlice';
 import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
+import './searchSection.css';
 
 export default function SearchSection() {
     const { inputValue, setSearchValues, handleChangeInput } = useSearchQueryRestore();

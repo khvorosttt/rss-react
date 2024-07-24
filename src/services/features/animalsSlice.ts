@@ -42,10 +42,19 @@ export const animalsSlice = createSlice({
             state.selectedAnimals.push(payload);
             return state;
         },
+        unselectAll(state) {
+            return { ...state, selectedAnimals: [] };
+        },
     },
 });
 
-export const { updateSearchQuery, updateAnimals, updateCurrentCardDetail, removeSelectedCard, addSelectedCard } =
-    animalsSlice.actions;
+export const {
+    updateSearchQuery,
+    updateAnimals,
+    updateCurrentCardDetail,
+    removeSelectedCard,
+    addSelectedCard,
+    unselectAll,
+} = animalsSlice.actions;
 
 export default animalsSlice.reducer;

@@ -42,10 +42,10 @@ export default function Pagination() {
 
     return (
         <div className="pagination">
-            <button type="button" className="prev" onClick={prevClickHandler}>
+            <button type="button" className="prev" onClick={prevClickHandler} disabled={pageInfo.firstPage}>
                 Prev
             </button>
-            <button type="button" className="next" onClick={nextClickHandler}>
+            <button type="button" className="next" onClick={nextClickHandler} disabled={pageInfo.lastPage}>
                 Next
             </button>
         </div>

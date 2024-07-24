@@ -34,7 +34,9 @@ export default function Card({ animal, pageId }: CardProps) {
         <div className="card">
             <input type="checkbox" onChange={(event) => checkCardHandler(event)} checked={isSelected()} />
             <div className="card-shot-info">{animal.name}</div>
-            <NavLink to={`/page/${pageId}/?detail=${animal.uid}`}>Show Details</NavLink>
+            <NavLink className="details-button" to={`/page/${pageId}/?detail=${animal.uid}`}>
+                Show Details
+            </NavLink>
         </div>
     );
 }
