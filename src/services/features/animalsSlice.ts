@@ -7,6 +7,7 @@ export interface AnimalsState {
     currentCardDetail: AnimalBody | null;
     animals: AnimalBody[];
     pageInfo: PageInfo;
+    selectedAnimals: AnimalBody[];
 }
 
 export const initialAnimalsState: AnimalsState = {
@@ -14,6 +15,7 @@ export const initialAnimalsState: AnimalsState = {
     currentCardDetail: null,
     animals: [],
     pageInfo: initPageInfo,
+    selectedAnimals: [],
 };
 
 export const animalsSlice = createSlice({
@@ -29,9 +31,21 @@ export const animalsSlice = createSlice({
         updateCurrentCardDetail(state, action) {
             return { ...state, currentCardDetail: action.payload };
         },
+        removeSelectedCard(state, action) {
+            const findIndex: number = state.selectedAnimals.findIndex((value) => value.uid === action.payload);
+            if (findIndex !== -1) {
+                state.selectedAnimals.splice(findIndex, 1);
+            }
+            return state;
+        },
+        addSelectedCard(state, { payload }: { payload: AnimalBody }) {
+            state.selectedAnimals.push(payload);
+            return state;
+        },
     },
 });
 
-export const { updateSearchQuery, updateAnimals, updateCurrentCardDetail } = animalsSlice.actions;
+export const { updateSearchQuery, updateAnimals, updateCurrentCardDetail, removeSelectedCard, addSelectedCard } =
+    animalsSlice.actions;
 
 export default animalsSlice.reducer;
