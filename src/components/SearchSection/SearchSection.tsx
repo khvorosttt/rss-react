@@ -1,19 +1,48 @@
-import { ChangeEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
+import { useEffect } from 'react';
 import Input from '../Input/Input';
 import SearchButton from '../SearchButton/SearchButton';
 import ErrorButton from '../ErrorButton/ErrorButton';
+import useSearchQueryRestore from '../../utils/hooks/useSearchQueryRestore';
+import { updateAnimals, updateSearchQuery } from '../../services/features/animalsSlice';
+import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
 
-export interface SearchProps {
-    searchQuery: string;
-    inputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-    searchButton: () => void;
-}
+export default function SearchSection() {
+    const { inputValue, setSearchValues, handleChangeInput } = useSearchQueryRestore();
+    const [getAnimalsByName, { data, isLoading }] = useGetAnimalsByNameMutation();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { pageId } = useParams<{ pageId: string }>();
 
-export default function SearchSection({ searchQuery, inputChange, searchButton }: SearchProps) {
+    const clickSearchButtonHandler = () => {
+        setSearchValues();
+        dispatch(updateSearchQuery(inputValue));
+        getAnimalsByName({
+            name: inputValue,
+            pageNumber: Number(pageId),
+        });
+        navigate(`/page/0`);
+    };
+
+    useEffect(() => {
+        if (!isLoading && data) {
+            dispatch(updateAnimals({ animals: data.animals, page: data.page }));
+        }
+    }, [data, isLoading, dispatch]);
+
+    useEffect(() => {
+        dispatch(updateSearchQuery(inputValue));
+        getAnimalsByName({
+            name: inputValue,
+            pageNumber: Number(pageId),
+        });
+    }, [pageId, dispatch]);
+
     return (
         <div className="search-section">
-            <Input searchQuery={searchQuery} onChange={inputChange} />
-            <SearchButton onClick={searchButton} />
+            <Input searchQuery={inputValue} onChange={handleChangeInput} />
+            <SearchButton onClick={clickSearchButtonHandler} />
             <ErrorButton />
         </div>
     );

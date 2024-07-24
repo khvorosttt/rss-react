@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { animalsApi } from '../services/api/animalsApi';
+import animalsReducer from '../services/features/animalsSlice';
 
 export const store = configureStore({
     reducer: {
         [animalsApi.reducerPath]: animalsApi.reducer,
+        animals: animalsReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(animalsApi.middleware),
 });

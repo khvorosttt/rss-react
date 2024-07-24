@@ -5,7 +5,7 @@ export default function useSearchQueryRestore() {
         return localStorage.getItem('savedSearch') || '';
     };
 
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(getLocalStorageSearchQuery);
     const [searchQuery, setSearchQuery] = useState(getLocalStorageSearchQuery);
     const searchQueryRef = useRef(searchQuery);
 
@@ -26,8 +26,7 @@ export default function useSearchQueryRestore() {
 
     return {
         inputValue,
-        searchQueryRef,
-        setSearchQuery,
+        searchQuery,
         setSearchValues,
         handleChangeInput,
     };

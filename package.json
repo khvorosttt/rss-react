@@ -15,6 +15,7 @@
         "coverage": "vitest run --coverage"
     },
     "dependencies": {
+        "@redux-devtools/extension": "^3.3.0",
         "@reduxjs/toolkit": "^2.2.6",
         "@testing-library/dom": "^10.3.1",
         "eslint-config-airbnb-typescript": "^18.0.0",

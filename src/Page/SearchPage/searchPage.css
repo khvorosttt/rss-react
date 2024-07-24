@@ -13,7 +13,7 @@
 
 .result-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     max-width: 500px;
     gap: 10px;
 }

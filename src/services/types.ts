@@ -34,8 +34,8 @@ interface ClausesInfo {
 
 export interface ResponseBody {
     page: PageInfo;
-    sort: SortInfo;
     animals: AnimalBody[];
+    sort?: SortInfo;
 }
 
 export interface RequestBody {

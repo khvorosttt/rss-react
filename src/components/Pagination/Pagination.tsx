@@ -1,25 +1,41 @@
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { PageInfo } from '../../services/types';
 import './pagination.css';
+import { RootState } from '../../app/store';
+import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
+import { updateAnimals } from '../../services/features/animalsSlice';
 
-interface PaginationProps {
-    setPageNumber: (newValue: string) => void;
-    pageInfo: PageInfo | undefined;
-}
-
-export default function Pagination({ setPageNumber, pageInfo }: PaginationProps) {
+export default function Pagination() {
     const navigate = useNavigate();
+    const pageInfo: PageInfo = useSelector((state: RootState) => state.animals.pageInfo);
+    const [getAnimalsByName, { data, isLoading }] = useGetAnimalsByNameMutation();
+    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!isLoading && data) {
+            dispatch(updateAnimals({ animals: data.animals, page: data.page }));
+        }
+    }, [data, isLoading, dispatch]);
 
     const prevClickHandler = () => {
         if (pageInfo && !pageInfo.firstPage) {
-            setPageNumber((Number(pageInfo.pageNumber) - 1).toString());
+            getAnimalsByName({
+                name: searchQuery,
+                pageNumber: Number(pageInfo.pageNumber) - 1,
+            });
             navigate(`/page/${Number(pageInfo.pageNumber) - 1}`);
         }
     };
 
     const nextClickHandler = () => {
         if (pageInfo && !pageInfo.lastPage) {
-            setPageNumber((Number(pageInfo.pageNumber) + 1).toString());
+            getAnimalsByName({
+                name: searchQuery,
+                pageNumber: Number(pageInfo.pageNumber) + 1,
+            });
             navigate(`/page/${Number(pageInfo.pageNumber) + 1}`);
         }
     };
