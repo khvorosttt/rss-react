@@ -4,7 +4,7 @@ import { useLoaderData, useNavigate } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import CardDetail from '../components/CardDetail/CardDetail';
 import { testAnimals } from './data';
-import { getFieldStatus } from '../utils/hooks/constants';
+import { getFieldStatus } from '../utils/constants';
 
 vi.mock('react-router', () => ({
     useLoaderData: vi.fn(),

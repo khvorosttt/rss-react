@@ -1,7 +1,9 @@
 import { useDispatch } from 'react-redux';
+import { useContext } from 'react';
 import { unselectAll } from '../../services/features/animalsSlice';
 import { AnimalBody } from '../../services/types';
 import './selectedPanel.css';
+import { ThemeContext } from '../../utils/constants';
 
 interface SelectedPanelProps {
     selectedAnimals: AnimalBody[];
@@ -9,6 +11,7 @@ interface SelectedPanelProps {
 
 export default function SelectedPanel({ selectedAnimals }: SelectedPanelProps) {
     const dispatch = useDispatch();
+    const theme = useContext(ThemeContext);
 
     const unselectedAllClickHandler = () => {
         dispatch(unselectAll());
@@ -27,14 +30,14 @@ export default function SelectedPanel({ selectedAnimals }: SelectedPanelProps) {
     };
 
     return (
-        <div className="selected-panel">
+        <div className={`selected-panel ${theme}-panel`}>
             <p>{selectedAnimals.length} items are selected</p>
             <div className="selected-panel-button">
-                <button className="unselect-button" type="button" onClick={unselectedAllClickHandler}>
+                <button className={`unselect-button ${theme}-button`} type="button" onClick={unselectedAllClickHandler}>
                     Unselect all
                 </button>
                 <a
-                    className="dowload-button"
+                    className={`dowload-button ${theme}-button`}
                     href={covertToCSVFormat()}
                     download={`${selectedAnimals.length}_animals.csv`}
                 >

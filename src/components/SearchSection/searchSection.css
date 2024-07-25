@@ -3,3 +3,36 @@
     justify-content: center;
     gap: 15px;
 }
+
+.search-input {
+    border: transparent;
+    border-radius: 5px;
+    min-width: 200px;
+}
+
+.light-input {
+    background-color: rgb(205,173,126, 0.4);
+    color: black;
+}
+
+.dark-input {
+    background-color:rgb(153,21,5, 0.4);
+    color: white;
+}
+
+@media(max-width: 550px) {
+    .search-section {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .search-button,
+    .error-button {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .search-input {
+        padding: 5px;
+    }
+}

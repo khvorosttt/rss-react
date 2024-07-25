@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { PageInfo } from '../../services/types';
 import './pagination.css';
-import { RootState } from '../../app/store';
+import { RootState } from '../../store/store';
 import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
 import { updateAnimals } from '../../services/features/animalsSlice';
+import { ThemeContext, ThemeVariant } from '../../utils/constants';
 
 export default function Pagination() {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function Pagination() {
     const [getAnimalsByName, { data, isLoading }] = useGetAnimalsByNameMutation();
     const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
     const dispatch = useDispatch();
+    const theme: ThemeVariant = useContext(ThemeContext);
 
     useEffect(() => {
         if (!isLoading && data) {
@@ -42,10 +44,20 @@ export default function Pagination() {
 
     return (
         <div className="pagination">
-            <button type="button" className="prev" onClick={prevClickHandler} disabled={pageInfo.firstPage}>
+            <button
+                type="button"
+                className={`prev ${theme}-button`}
+                onClick={prevClickHandler}
+                disabled={pageInfo.firstPage}
+            >
                 Prev
             </button>
-            <button type="button" className="next" onClick={nextClickHandler} disabled={pageInfo.lastPage}>
+            <button
+                type="button"
+                className={`next ${theme}-button`}
+                onClick={nextClickHandler}
+                disabled={pageInfo.lastPage}
+            >
                 Next
             </button>
         </div>

@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import Loader from '../Loader/Loader';
 import './cardDetail.css';
-import { getFieldStatus, SearchParams } from '../../utils/hooks/constants';
+import { getFieldStatus, SearchParams, ThemeContext, ThemeVariant } from '../../utils/constants';
 import { useGetAnimalByIdQuery } from '../../services/api/animalsApi';
 import { updateCurrentCardDetail } from '../../services/features/animalsSlice';
-import { RootState } from '../../app/store';
+import { RootState } from '../../store/store';
 import { AnimalBody } from '../../services/types';
 
 export default function CardDetail() {
@@ -18,6 +18,7 @@ export default function CardDetail() {
     const { data, isLoading, isError } = useGetAnimalByIdQuery(detailId!);
     const dispatch = useDispatch();
     const currentCardDetail: AnimalBody | null = useSelector((state: RootState) => state.animals.currentCardDetail);
+    const theme: ThemeVariant = useContext(ThemeContext);
 
     useEffect(() => {
         if (!isLoading && data) {
@@ -47,7 +48,7 @@ export default function CardDetail() {
     if (currentCardDetail !== null) {
         const { name, earthAnimal, earthInsect, avian, canine, feline } = currentCardDetail;
         return (
-            <div className="detail-container">
+            <div className={`detail-container ${theme}-card`}>
                 <div className="card-detail">
                     <h3>Animal</h3>
                     <p>Name: {name}</p>
@@ -57,7 +58,7 @@ export default function CardDetail() {
                     <p>Canine: {getFieldStatus(canine)}</p>
                     <p>Feline: {getFieldStatus(feline)}</p>
                 </div>
-                <button type="button" className="button-close" onClick={clickCloseHandler}>
+                <button type="button" className={`button-close ${theme}-button`} onClick={clickCloseHandler}>
                     Close
                 </button>
             </div>

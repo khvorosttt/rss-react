@@ -1,16 +1,19 @@
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useContext } from 'react';
 import { AnimalBody } from '../../services/types';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import './resultSection.css';
 import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
-import { RootState } from '../../app/store';
+import { RootState } from '../../store/store';
+import { ThemeContext, ThemeVariant } from '../../utils/constants';
 
 export default function ResultSection() {
     const { pageId } = useParams<{ pageId: string }>();
     const [, { isLoading, isError }] = useGetAnimalsByNameMutation();
     const animals: AnimalBody[] = useSelector((state: RootState) => state.animals.animals);
+    const theme: ThemeVariant = useContext(ThemeContext);
 
     if (isLoading) {
         return <Loader />;
@@ -24,7 +27,7 @@ export default function ResultSection() {
         <div className="result-section">
             {animals && animals.length !== 0
                 ? animals.map((value) => {
-                      return <Card key={value.uid} animal={value} pageId={pageId} />;
+                      return <Card key={value.uid} animal={value} pageId={pageId} theme={`${theme}`} />;
                   })
                 : 'No results were found for your request'}
         </div>

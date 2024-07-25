@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import SearchSection from '../../components/SearchSection/SearchSection';
 import ResultSection from '../../components/ResultSection/ResultSection';
 import './searchPage.css';
-import { SearchParams } from '../../utils/hooks/constants';
+import { SearchParams } from '../../utils/constants';
 import Pagination from '../../components/Pagination/Pagination';
 import SelectedPanel from '../../components/SelectedPanel/SelectedPanel';
 import { AnimalBody } from '../../services/types';
-import { RootState } from '../../app/store';
+import { RootState } from '../../store/store';
 
 export default function SearchPage() {
     const [searchParams] = useSearchParams();

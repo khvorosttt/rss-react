@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AnimalBody, PageInfo, ResponseBody } from '../types';
-import { initPageInfo } from '../../utils/hooks/constants';
+import { initPageInfo } from '../../utils/constants';
 
 export interface AnimalsState {
     searchQuery: string;

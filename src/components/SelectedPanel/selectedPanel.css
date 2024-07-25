@@ -5,10 +5,8 @@
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
-    background-color: #f9f9f9;;
     cursor: pointer;
     transition: border-color 0.25s;
-    color: black;
 }
 
 .selected-panel-button {
@@ -22,7 +20,33 @@
     flex-direction: column;
     justify-content: center;
     border-radius: 8px;
-    border: 1px solid black;
     width: max-content;
     padding: 10px;
+    text-align: center;
+}
+
+.light-panel {
+    background-color: rgb(205,173,126, 0.8);
+}
+
+.dark-panel {
+    background-color:rgb(153,21,5, 0.8);
+}
+
+@media (max-width: 550px) {
+    .selected-panel {
+        width: max-content;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .selected-panel p {
+        margin: 0;
+    }
+
+    .unselect-button,
+    .dowload-button {
+        padding: 5px 10px;
+    }
+
 }

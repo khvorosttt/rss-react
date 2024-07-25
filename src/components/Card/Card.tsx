@@ -4,13 +4,14 @@ import { ChangeEvent } from 'react';
 import { AnimalBody } from '../../services/types';
 import './card.css';
 import { addSelectedCard, removeSelectedCard } from '../../services/features/animalsSlice';
-import { RootState } from '../../app/store';
+import { RootState } from '../../store/store';
 
 interface CardProps {
     animal: AnimalBody;
     pageId: string | undefined;
+    theme: string;
 }
-export default function Card({ animal, pageId }: CardProps) {
+export default function Card({ animal, pageId, theme }: CardProps) {
     const dispatch = useDispatch();
     const selectedCards: AnimalBody[] = useSelector((state: RootState) => state.animals.selectedAnimals);
 
@@ -31,10 +32,15 @@ export default function Card({ animal, pageId }: CardProps) {
     };
 
     return (
-        <div className="card">
-            <input type="checkbox" onChange={(event) => checkCardHandler(event)} checked={isSelected()} />
+        <div className={`card ${theme}-card`}>
+            <input
+                className={`${theme}-checkbox`}
+                type="checkbox"
+                onChange={(event) => checkCardHandler(event)}
+                checked={isSelected()}
+            />
             <div className="card-shot-info">{animal.name}</div>
-            <NavLink className="details-button" to={`/page/${pageId}/?detail=${animal.uid}`}>
+            <NavLink className={`details-button ${theme}-button`} to={`/page/${pageId}/?detail=${animal.uid}`}>
                 Show Details
             </NavLink>
         </div>

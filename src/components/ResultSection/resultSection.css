@@ -4,3 +4,10 @@
     gap: 15px;
     justify-content: space-around;
 }
+
+@media (max-width: 780px) {
+    .result-section {
+        overflow-y: auto;
+        height: 400px;
+    }
+}
