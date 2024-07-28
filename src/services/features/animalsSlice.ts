@@ -36,11 +36,9 @@ export const animalsSlice = createSlice({
             if (findIndex !== -1) {
                 state.selectedAnimals.splice(findIndex, 1);
             }
-            return state;
         },
         addSelectedCard(state, { payload }: { payload: AnimalBody }) {
             state.selectedAnimals.push(payload);
-            return state;
         },
         unselectAll(state) {
             return { ...state, selectedAnimals: [] };

@@ -5,17 +5,21 @@ import { AnimalBody } from '../../services/types';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import './resultSection.css';
-import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
+import { useGetAnimalsByNameQuery } from '../../services/api/animalsApi';
 import { RootState } from '../../store/store';
 import { ThemeContext, ThemeVariant } from '../../utils/constants';
 
 export default function ResultSection() {
     const { pageId } = useParams<{ pageId: string }>();
-    const [, { isLoading, isError }] = useGetAnimalsByNameMutation();
+    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
+    const { isFetching, isError } = useGetAnimalsByNameQuery({
+        name: searchQuery,
+        pageNumber: Number(pageId),
+    });
     const animals: AnimalBody[] = useSelector((state: RootState) => state.animals.animals);
     const theme: ThemeVariant = useContext(ThemeContext);
 
-    if (isLoading) {
+    if (isFetching) {
         return <Loader />;
     }
 

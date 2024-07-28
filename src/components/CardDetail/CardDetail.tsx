@@ -15,19 +15,13 @@ export default function CardDetail() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const detailId = searchParams.get(SearchParams.detail);
-    const { data, isLoading, isError } = useGetAnimalByIdQuery(detailId!);
+    const { data, isFetching, isError } = useGetAnimalByIdQuery(detailId!);
     const dispatch = useDispatch();
     const currentCardDetail: AnimalBody | null = useSelector((state: RootState) => state.animals.currentCardDetail);
     const theme: ThemeVariant = useContext(ThemeContext);
 
     useEffect(() => {
-        if (!isLoading && data) {
-            dispatch(updateCurrentCardDetail(data.animal));
-        }
-    }, [data, isLoading, dispatch]);
-
-    useEffect(() => {
-        if (detailId && data) {
+        if (detailId && data && data.animal) {
             dispatch(updateCurrentCardDetail(data.animal));
         }
     }, [detailId, data, dispatch]);
@@ -37,7 +31,7 @@ export default function CardDetail() {
         navigate(`/page/${pageId}`);
     };
 
-    if (isLoading) {
+    if (isFetching) {
         return <Loader />;
     }
 
@@ -45,7 +39,7 @@ export default function CardDetail() {
         return <div>Error loading animal data</div>;
     }
 
-    if (currentCardDetail !== null) {
+    if (currentCardDetail) {
         const { name, earthAnimal, earthInsect, avian, canine, feline } = currentCardDetail;
         return (
             <div className={`detail-container ${theme}-card`}>

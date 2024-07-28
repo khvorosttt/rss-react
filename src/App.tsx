@@ -1,32 +1,10 @@
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { useState } from 'react';
-import CardDetail from './components/CardDetail/CardDetail';
-import NotFoundPage from './Page/NotFoundPage/NotFoundPage';
-import SearchPage from './Page/SearchPage/SearchPage';
 import { ThemeContext, ThemeVariant } from './utils/constants';
 import store from './store/store';
 import './app.css';
-
-export const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Navigate to="/page/0" replace />,
-        errorElement: <NotFoundPage />,
-    },
-    {
-        path: '/page/:pageId',
-        element: <SearchPage />,
-        errorElement: <NotFoundPage />,
-        children: [
-            {
-                path: '',
-                element: <CardDetail />,
-                errorElement: <NotFoundPage />,
-            },
-        ],
-    },
-]);
+import router from './components/router/router';
 
 export default function App() {
     const [theme, setTheme] = useState<ThemeVariant>(ThemeVariant.light);

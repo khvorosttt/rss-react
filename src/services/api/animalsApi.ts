@@ -5,7 +5,7 @@ export const animalsApi = createApi({
     reducerPath: 'animalsApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://stapi.co/api/v1/rest' }),
     endpoints: (builder) => ({
-        getAnimalsByName: builder.mutation<ResponseBody, RequestBody>({
+        getAnimalsByName: builder.query<ResponseBody, RequestBody>({
             query: (request: RequestBody) => ({
                 url: `/animal/search/?pageNumber=${request.pageNumber}&pageSize=9`,
                 method: 'POST',
@@ -21,4 +21,4 @@ export const animalsApi = createApi({
     }),
 });
 
-export const { useGetAnimalsByNameMutation, useGetAnimalByIdQuery } = animalsApi;
+export const { useGetAnimalsByNameQuery, useLazyGetAnimalsByNameQuery, useGetAnimalByIdQuery } = animalsApi;

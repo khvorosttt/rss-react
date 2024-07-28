@@ -2,7 +2,7 @@ import { Navigate, RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { act, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import NotFound from '../Page/NotFoundPage/NotFoundPage';
-import Search from '../Page/SearchPage/SearchPage';
+import SearchPage from '../Page/SearchPage/SearchPage';
 import CardDetail from '../components/CardDetail/CardDetail';
 
 describe('Not Found Page Test', () => {
@@ -15,7 +15,7 @@ describe('Not Found Page Test', () => {
             },
             {
                 path: '/page/:pageId',
-                element: <Search />,
+                element: <SearchPage />,
                 errorElement: <NotFound />,
                 children: [
                     {

@@ -1,28 +1,29 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { useContext, useEffect } from 'react';
 import ErrorButton from '../ErrorButton/ErrorButton';
 import useSearchQueryRestore from '../../utils/hooks/useSearchQueryRestore';
 import { updateAnimals, updateSearchQuery } from '../../services/features/animalsSlice';
-import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
+import { useGetAnimalsByNameQuery } from '../../services/api/animalsApi';
 import './searchSection.css';
 import { ThemeContext, ThemeVariant } from '../../utils/constants';
+import { RootState } from '../../store/store';
 
 export default function SearchSection() {
     const { inputValue, setSearchValues, handleChangeInput } = useSearchQueryRestore();
-    const [getAnimalsByName, { data, isLoading }] = useGetAnimalsByNameMutation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { pageId } = useParams<{ pageId: string }>();
+    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
+    const { data, isLoading } = useGetAnimalsByNameQuery({
+        name: searchQuery,
+        pageNumber: Number(pageId),
+    });
     const theme: ThemeVariant = useContext(ThemeContext);
 
     const clickSearchButtonHandler = () => {
         setSearchValues();
         dispatch(updateSearchQuery(inputValue));
-        getAnimalsByName({
-            name: inputValue,
-            pageNumber: Number(pageId),
-        });
         navigate(`/page/0`);
     };
 
@@ -33,12 +34,9 @@ export default function SearchSection() {
     }, [data, isLoading, dispatch]);
 
     useEffect(() => {
+        setSearchValues();
         dispatch(updateSearchQuery(inputValue));
-        getAnimalsByName({
-            name: inputValue,
-            pageNumber: Number(pageId),
-        });
-    }, [pageId, dispatch]);
+    }, []);
 
     return (
         <div className="search-section">

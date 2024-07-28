@@ -4,40 +4,31 @@ import { useContext, useEffect } from 'react';
 import { PageInfo } from '../../services/types';
 import './pagination.css';
 import { RootState } from '../../store/store';
-import { useGetAnimalsByNameMutation } from '../../services/api/animalsApi';
+import { useLazyGetAnimalsByNameQuery } from '../../services/api/animalsApi';
 import { updateAnimals } from '../../services/features/animalsSlice';
 import { ThemeContext, ThemeVariant } from '../../utils/constants';
 
 export default function Pagination() {
     const navigate = useNavigate();
     const pageInfo: PageInfo = useSelector((state: RootState) => state.animals.pageInfo);
-    const [getAnimalsByName, { data, isLoading }] = useGetAnimalsByNameMutation();
-    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
+    const [, { data, isFetching }] = useLazyGetAnimalsByNameQuery();
     const dispatch = useDispatch();
     const theme: ThemeVariant = useContext(ThemeContext);
 
     useEffect(() => {
-        if (!isLoading && data) {
+        if (!isFetching && data) {
             dispatch(updateAnimals({ animals: data.animals, page: data.page }));
         }
-    }, [data, isLoading, dispatch]);
+    }, [data, isFetching, dispatch]);
 
     const prevClickHandler = () => {
         if (pageInfo && !pageInfo.firstPage) {
-            getAnimalsByName({
-                name: searchQuery,
-                pageNumber: Number(pageInfo.pageNumber) - 1,
-            });
             navigate(`/page/${Number(pageInfo.pageNumber) - 1}`);
         }
     };
 
     const nextClickHandler = () => {
         if (pageInfo && !pageInfo.lastPage) {
-            getAnimalsByName({
-                name: searchQuery,
-                pageNumber: Number(pageInfo.pageNumber) + 1,
-            });
             navigate(`/page/${Number(pageInfo.pageNumber) + 1}`);
         }
     };

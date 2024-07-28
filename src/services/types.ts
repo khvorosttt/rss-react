@@ -42,3 +42,5 @@ export interface RequestBody {
     name: string;
     pageNumber: number;
 }
+
+export const elementsOnPage = 9;

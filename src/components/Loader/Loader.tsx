@@ -5,5 +5,5 @@ import './loader.css';
 export default function Loader() {
     const theme: ThemeVariant = useContext(ThemeContext);
 
-    return <div className={`loader ${theme}-loader`} />;
+    return <div className={`loader ${theme}-loader`} role="status" />;
 }
