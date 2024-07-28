@@ -1,31 +1,39 @@
-import { useNavigate, useParams } from 'react-router';
-import { AnimalBody } from '../../services/api/Api';
+import { useParams } from 'react-router';
+import { useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { AnimalBody } from '../../services/types';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import './resultSection.css';
+import { useGetAnimalsByNameQuery } from '../../services/api/animalsApi';
+import { RootState } from '../../store/store';
+import { ThemeContext, ThemeVariant } from '../../utils/constants';
 
-export interface ResultProps {
-    isLoading: boolean;
-    result: AnimalBody[];
-}
-
-export default function ResultSection({ isLoading, result }: ResultProps) {
+export default function ResultSection() {
     const { pageId } = useParams<{ pageId: string }>();
-    const navigate = useNavigate();
+    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
+    const { isFetching, isError } = useGetAnimalsByNameQuery({
+        name: searchQuery,
+        pageNumber: Number(pageId),
+    });
+    const animals: AnimalBody[] = useSelector((state: RootState) => state.animals.animals);
+    const theme: ThemeVariant = useContext(ThemeContext);
+
+    if (isFetching) {
+        return <Loader />;
+    }
+
+    if (isError) {
+        return <div>Error loading animal data</div>;
+    }
 
     return (
-        <Loader isLoading={isLoading}>
-            <div
-                className="result-section"
-                onClick={() => navigate(`/page/${pageId}`)}
-                onKeyDown={() => navigate(`/page/${pageId}`)}
-                role="button"
-                tabIndex={0}
-            >
-                {result.map((value) => {
-                    return <Card key={value.uid} animal={value} pageId={pageId} />;
-                })}
-            </div>
-        </Loader>
+        <div className="result-section">
+            {animals && animals.length !== 0
+                ? animals.map((value) => {
+                      return <Card key={value.uid} animal={value} pageId={pageId} theme={`${theme}`} />;
+                  })
+                : 'No results were found for your request'}
+        </div>
     );
 }

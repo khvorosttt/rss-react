@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import { ThemeVariant } from '../../utils/constants';
 
-export default function ErrorButton() {
+interface ErrorButtonProps {
+    theme: ThemeVariant;
+}
+
+export default function ErrorButton({ theme }: ErrorButtonProps) {
     const [hasError, setHasError] = useState(false);
     const handleClick = () => {
         setHasError(true);
@@ -9,7 +14,7 @@ export default function ErrorButton() {
         throw new Error('The error eject button was pressed');
     }
     return (
-        <button className="error-button" type="button" onClick={handleClick}>
+        <button className={`error-button ${theme}-button`} type="button" onClick={handleClick}>
             Throw error
         </button>
     );

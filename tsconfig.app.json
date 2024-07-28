@@ -9,13 +9,15 @@
         "skipLibCheck": true,
 
         /* Bundler mode */
-        "moduleResolution": "bundler",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "moduleDetection": "force",
         "noEmit": true,
         "jsx": "react-jsx",
+        "types": ["vitest/globals"],
 
         /* Linting */
         "strict": true,

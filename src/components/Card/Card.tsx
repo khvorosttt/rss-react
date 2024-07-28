@@ -1,19 +1,48 @@
 import { NavLink } from 'react-router-dom';
-import { AnimalBody } from '../../services/api/Api';
+import { useDispatch, useSelector } from 'react-redux';
+import { ChangeEvent } from 'react';
+import { AnimalBody } from '../../services/types';
 import './card.css';
+import { addSelectedCard, removeSelectedCard } from '../../services/features/animalsSlice';
+import { RootState } from '../../store/store';
 
 interface CardProps {
     animal: AnimalBody;
     pageId: string | undefined;
+    theme: string;
 }
-export default function Card({ animal, pageId }: CardProps) {
-    const stopPropagationHandler = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+export default function Card({ animal, pageId, theme }: CardProps) {
+    const dispatch = useDispatch();
+    const selectedCards: AnimalBody[] = useSelector((state: RootState) => state.animals.selectedAnimals);
+
+    const isSelected = () => {
+        return selectedCards.findIndex((value) => value.uid === animal.uid) !== -1;
+    };
+
+    const checkCardHandler = (event: ChangeEvent<HTMLInputElement>) => {
         event.stopPropagation();
+        const checkbox: HTMLInputElement = event.currentTarget;
+        if (isSelected()) {
+            dispatch(removeSelectedCard(animal.uid));
+            checkbox.checked = false;
+        } else {
+            dispatch(addSelectedCard(animal));
+            checkbox.checked = true;
+        }
     };
 
     return (
-        <NavLink to={`/page/${pageId}/?detail=${animal.uid}`} onClick={(event) => stopPropagationHandler(event)}>
-            <div className="card">{animal.name}</div>
-        </NavLink>
+        <div className={`card ${theme}-card`}>
+            <input
+                className={`${theme}-checkbox`}
+                type="checkbox"
+                onChange={(event) => checkCardHandler(event)}
+                checked={isSelected()}
+            />
+            <div className="card-shot-info">{animal.name}</div>
+            <NavLink className={`details-button ${theme}-button`} to={`/page/${pageId}/?detail=${animal.uid}`}>
+                Show Details
+            </NavLink>
+        </div>
     );
 }

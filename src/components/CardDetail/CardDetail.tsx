@@ -1,42 +1,61 @@
-import { useEffect, useState } from 'react';
-import { useLoaderData, useNavigate, useParams } from 'react-router';
-import { AnimalBody } from '../../services/api/Api';
+import { useNavigate, useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useContext, useEffect } from 'react';
 import Loader from '../Loader/Loader';
 import './cardDetail.css';
+import { getFieldStatus, SearchParams, ThemeContext, ThemeVariant } from '../../utils/constants';
+import { useGetAnimalByIdQuery } from '../../services/api/animalsApi';
+import { updateCurrentCardDetail } from '../../services/features/animalsSlice';
+import { RootState } from '../../store/store';
+import { AnimalBody } from '../../services/types';
 
 export default function CardDetail() {
-    const { animal } = useLoaderData() as { animal: AnimalBody };
-    const { name, earthAnimal, earthInsect, avian, canine, feline } = animal;
-    const [isLoading, setIsLoading] = useState(true);
     const { pageId } = useParams<{ pageId: string }>();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const detailId = searchParams.get(SearchParams.detail);
+    const { data, isFetching, isError } = useGetAnimalByIdQuery(detailId!);
+    const dispatch = useDispatch();
+    const currentCardDetail: AnimalBody | null = useSelector((state: RootState) => state.animals.currentCardDetail);
+    const theme: ThemeVariant = useContext(ThemeContext);
 
     useEffect(() => {
-        if (animal) {
-            setIsLoading(false);
+        if (detailId && data && data.animal) {
+            dispatch(updateCurrentCardDetail(data.animal));
         }
-    }, [animal]);
+    }, [detailId, data, dispatch]);
 
     const clickCloseHandler = () => {
+        dispatch(updateCurrentCardDetail(null));
         navigate(`/page/${pageId}`);
     };
 
-    return (
-        <Loader isLoading={isLoading}>
-            <div className="detail-container">
+    if (isFetching) {
+        return <Loader />;
+    }
+
+    if (isError) {
+        return <div>Error loading animal data</div>;
+    }
+
+    if (currentCardDetail) {
+        const { name, earthAnimal, earthInsect, avian, canine, feline } = currentCardDetail;
+        return (
+            <div className={`detail-container ${theme}-card`}>
                 <div className="card-detail">
                     <h3>Animal</h3>
                     <p>Name: {name}</p>
-                    <p>Earth Animal: {earthAnimal ? 'yes' : 'no'}</p>
-                    <p>Earth Insect: {earthInsect ? 'yes' : 'no'}</p>
-                    <p>Avian: {avian ? 'yes' : 'no'}</p>
-                    <p>Canine: {canine ? 'yes' : 'no'}</p>
-                    <p>Feline: {feline ? 'yes' : 'no'}</p>
+                    <p>Earth Animal: {getFieldStatus(earthAnimal)}</p>
+                    <p>Earth Insect: {getFieldStatus(earthInsect)}</p>
+                    <p>Avian: {getFieldStatus(avian)}</p>
+                    <p>Canine: {getFieldStatus(canine)}</p>
+                    <p>Feline: {getFieldStatus(feline)}</p>
                 </div>
-                <button type="button" className="button-close" onClick={clickCloseHandler}>
+                <button type="button" className={`button-close ${theme}-button`} onClick={clickCloseHandler}>
                     Close
                 </button>
             </div>
-        </Loader>
-    );
+        );
+    }
 }

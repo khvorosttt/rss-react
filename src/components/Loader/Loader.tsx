@@ -1,14 +1,9 @@
-import { ReactNode } from 'react';
+import { useContext } from 'react';
+import { ThemeContext, ThemeVariant } from '../../utils/constants';
 import './loader.css';
 
-interface LoaderInfo {
-    isLoading: boolean;
-    children: ReactNode;
-}
+export default function Loader() {
+    const theme: ThemeVariant = useContext(ThemeContext);
 
-export default function Loader({ isLoading, children }: LoaderInfo) {
-    if (isLoading) {
-        return <div className="loader" />;
-    }
-    return children;
+    return <div className={`loader ${theme}-loader`} role="status" />;
 }

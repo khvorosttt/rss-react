@@ -3,5 +3,11 @@
     flex-wrap: wrap;
     gap: 15px;
     justify-content: space-around;
-    width: 50%;
+}
+
+@media (max-width: 780px) {
+    .result-section {
+        overflow-y: auto;
+        height: 400px;
+    }
 }

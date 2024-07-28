@@ -1,35 +1,54 @@
 import { useNavigate } from 'react-router';
-import { PageInfo } from '../../services/api/Api';
+import { useDispatch, useSelector } from 'react-redux';
+import { useContext, useEffect } from 'react';
+import { PageInfo } from '../../services/types';
 import './pagination.css';
+import { RootState } from '../../store/store';
+import { useLazyGetAnimalsByNameQuery } from '../../services/api/animalsApi';
+import { updateAnimals } from '../../services/features/animalsSlice';
+import { ThemeContext, ThemeVariant } from '../../utils/constants';
 
-interface PaginationProps {
-    setPageNumber: (newValue: string) => void;
-    pageInfo: PageInfo | undefined;
-}
-
-export default function Pagination({ setPageNumber, pageInfo }: PaginationProps) {
+export default function Pagination() {
     const navigate = useNavigate();
+    const pageInfo: PageInfo = useSelector((state: RootState) => state.animals.pageInfo);
+    const [, { data, isFetching }] = useLazyGetAnimalsByNameQuery();
+    const dispatch = useDispatch();
+    const theme: ThemeVariant = useContext(ThemeContext);
+
+    useEffect(() => {
+        if (!isFetching && data) {
+            dispatch(updateAnimals({ animals: data.animals, page: data.page }));
+        }
+    }, [data, isFetching, dispatch]);
 
     const prevClickHandler = () => {
         if (pageInfo && !pageInfo.firstPage) {
-            setPageNumber((Number(pageInfo.pageNumber) - 1).toString());
             navigate(`/page/${Number(pageInfo.pageNumber) - 1}`);
         }
     };
 
     const nextClickHandler = () => {
         if (pageInfo && !pageInfo.lastPage) {
-            setPageNumber((Number(pageInfo.pageNumber) + 1).toString());
             navigate(`/page/${Number(pageInfo.pageNumber) + 1}`);
         }
     };
 
     return (
         <div className="pagination">
-            <button type="button" className="prev" onClick={prevClickHandler}>
+            <button
+                type="button"
+                className={`prev ${theme}-button`}
+                onClick={prevClickHandler}
+                disabled={pageInfo.firstPage}
+            >
                 Prev
             </button>
-            <button type="button" className="next" onClick={nextClickHandler}>
+            <button
+                type="button"
+                className={`next ${theme}-button`}
+                onClick={nextClickHandler}
+                disabled={pageInfo.lastPage}
+            >
                 Next
             </button>
         </div>
