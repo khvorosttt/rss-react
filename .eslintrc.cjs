@@ -16,6 +16,7 @@ module.exports = {
         'plugin:prettier/recommended',
         'plugin:react/jsx-runtime',
         'prettier',
+        'next',
     ],
     overrides: [
         {
@@ -39,6 +40,5 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'error',
         'react-compiler/react-compiler': 'error',
         'prettier/prettier': 'error',
-        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
 };
