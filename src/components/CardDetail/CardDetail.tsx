@@ -10,7 +10,6 @@ import { ThemeContext } from '../../utils/ThemeProvider';
 
 export default function CardDetail() {
     const searchParams = useSearchParams();
-    console.log(searchParams);
     const pageId = searchParams.get('page') || '0';
     const router = useRouter();
     const dispatch = useDispatch();
