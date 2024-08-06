@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ErrorButton from '../components/ErrorButton/ErrorButton';
-import { ThemeVariant } from '../utils/constants';
 import ErrorBounder from '../components/ErrorBounder/ErrorBounder';
+import { ThemeVariant } from '../utils/ThemeProvider';
+import ErrorButton from '../components/ErrorButton/ErrorButton';
 
 describe('test error button component', () => {
     it('should throw an error when the button is clicked', async () => {

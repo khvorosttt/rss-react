@@ -1,43 +1,27 @@
-import { useNavigate, useParams } from 'react-router';
-import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useContext, useEffect } from 'react';
-import Loader from '../Loader/Loader';
-import './cardDetail.css';
-import { getFieldStatus, SearchParams, ThemeContext, ThemeVariant } from '../../utils/constants';
-import { useGetAnimalByIdQuery } from '../../services/api/animalsApi';
+import { useContext } from 'react';
+import { getFieldStatus } from '../../utils/constants';
 import { updateCurrentCardDetail } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
 import { AnimalBody } from '../../services/types';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { ThemeContext } from '../../utils/ThemeProvider';
 
 export default function CardDetail() {
-    const { pageId } = useParams<{ pageId: string }>();
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const detailId = searchParams.get(SearchParams.detail);
-    const { data, isFetching, isError } = useGetAnimalByIdQuery(detailId!);
+    const searchParams = useSearchParams();
+    console.log(searchParams);
+    const pageId = searchParams.get('page') || '0';
+    const router = useRouter();
     const dispatch = useDispatch();
+    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
     const currentCardDetail: AnimalBody | null = useSelector((state: RootState) => state.animals.currentCardDetail);
-    const theme: ThemeVariant = useContext(ThemeContext);
-
-    useEffect(() => {
-        if (detailId && data && data.animal) {
-            dispatch(updateCurrentCardDetail(data.animal));
-        }
-    }, [detailId, data, dispatch]);
+    const { theme } = useContext(ThemeContext);
 
     const clickCloseHandler = () => {
         dispatch(updateCurrentCardDetail(null));
-        navigate(`/page/${pageId}`);
+        router.push(`/?page=${pageId}&searchQuery=${searchQuery}`);
     };
-
-    if (isFetching) {
-        return <Loader />;
-    }
-
-    if (isError) {
-        return <div>Error loading animal data</div>;
-    }
 
     if (currentCardDetail) {
         const { name, earthAnimal, earthInsect, avian, canine, feline } = currentCardDetail;

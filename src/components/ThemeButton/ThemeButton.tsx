@@ -1,16 +1,8 @@
 import { useContext } from 'react';
-import { ThemeContext } from '../../utils/ThemeProvider';
+import { ThemeContext, ThemeVariant } from '../../utils/ThemeProvider';
 
 export default function ThemeButton() {
-    const context = useContext(ThemeContext);
-
-    if (!context) {
-        throw new Error('ThemeButton must be used within a ThemeProvider');
-    }
-
-    const { theme, setTheme } = context;
-
-    // const { theme, setTheme } = useContext(ThemeContext);
+    const { theme, setTheme } = useContext(ThemeContext);
 
     const changeTheme = () => {
         if (theme === ThemeVariant.light) {

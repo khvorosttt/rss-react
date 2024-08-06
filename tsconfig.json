@@ -7,8 +7,6 @@
         "lib": ["ES2020", "DOM", "DOM.Iterable"],
         "module": "ESNext",
         "skipLibCheck": true,
-
-        /* Bundler mode */
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
         "allowImportingTsExtensions": true,
@@ -21,8 +19,6 @@
         "allowJs": true,
         "forceConsistentCasingInFileNames": true,
         "incremental": true,
-
-        /* Linting */
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,

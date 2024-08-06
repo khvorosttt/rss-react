@@ -1,44 +1,42 @@
-import { setupServer } from 'msw/node';
 import { act, screen, waitFor } from '@testing-library/react';
 import { Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { useNavigate } from 'react-router';
-import { MemoryRouter } from 'react-router-dom';
-import handlers from './mock/handlers';
 import renderWithProviders from './renderWithProviders';
 import CardDetail from '../components/CardDetail/CardDetail';
 import { testAnimals } from './data';
 import { updateCurrentCardDetail } from '../services/features/animalsSlice';
 import { getFieldStatus } from '../utils/constants';
-
-const server = setupServer(...handlers);
-
-beforeAll(() => server.listen());
-
-afterEach(() => server.resetHandlers());
-
-afterAll(() => server.close());
+import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 
 vi.mock('react-router', () => ({
-    useParams: () => ({ pageId: '1' }),
-    useNavigate: vi.fn(),
     useSelector: vi.fn(),
 }));
 
+vi.mock('next/router', () => ({
+    useRouter: vi.fn(),
+}));
+
+vi.mock('next/navigation', () => ({
+    useSearchParams: vi.fn(),
+}));
+
 describe('test card detail component', () => {
-    const mockNavigate = vi.fn();
+    const mockPush = vi.fn();
 
     beforeEach(() => {
-        (useNavigate as Mock).mockReturnValue(mockNavigate);
-        vi.clearAllMocks();
+        (useRouter as Mock).mockReturnValue({
+            push: mockPush,
+        });
+        (useSearchParams as Mock).mockReturnValue({
+            get: () => {
+                return '0';
+            },
+        });
     });
 
     it('should display detail about animal', async () => {
-        const { store } = renderWithProviders(
-            <MemoryRouter initialEntries={['?detail=0']}>
-                <CardDetail />
-            </MemoryRouter>
-        );
+        const { store } = renderWithProviders(<CardDetail />);
         await act(() => store.dispatch(updateCurrentCardDetail(testAnimals[0])));
         await waitFor(() => {
             expect(screen.getByText('Animal')).toBeInTheDocument();
@@ -51,28 +49,11 @@ describe('test card detail component', () => {
         });
     });
 
-    it('should display error message', async () => {
-        renderWithProviders(
-            <MemoryRouter initialEntries={['?detail=a']}>
-                <CardDetail />
-            </MemoryRouter>
-        );
-        await waitFor(() => {
-            expect(screen.getByText('Error loading animal data'));
-        });
-    });
-
     it('should click close button', async () => {
-        const { store } = renderWithProviders(
-            <MemoryRouter initialEntries={['?detail=0']}>
-                <CardDetail />
-            </MemoryRouter>
-        );
-        await act(() => store.dispatch(updateCurrentCardDetail(testAnimals[0])));
-        await waitFor(async () => {
-            const closeButton = screen.getByText(/Close/i);
-            await userEvent.click(closeButton);
-            expect(mockNavigate).toHaveBeenCalledWith('/page/1');
-        });
+        const { store } = renderWithProviders(<CardDetail />);
+        act(() => store.dispatch(updateCurrentCardDetail(testAnimals[0])));
+        const closeButton = screen.getByText(/Close/i);
+        await userEvent.click(closeButton);
+        expect(mockPush).toHaveBeenCalledWith('/?page=0&searchQuery=');
     });
 });
