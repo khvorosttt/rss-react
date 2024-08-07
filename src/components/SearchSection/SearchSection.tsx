@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChangeEvent, useContext, useState } from 'react';
 import { updateSearchQuery } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
-import { useRouter } from 'next/router';
 import { ThemeContext } from '../../utils/ThemeProvider';
+import { useRouter } from 'next/navigation';
 
 export default function SearchSection() {
     const dispatch = useDispatch();

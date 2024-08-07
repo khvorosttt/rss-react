@@ -2,8 +2,8 @@ import { useSelector } from 'react-redux';
 import { useContext } from 'react';
 import { PageInfo } from '../../services/types';
 import { RootState } from '../../store/store';
-import { useRouter } from 'next/router';
 import { ThemeContext } from '../../utils/ThemeProvider';
+import { useRouter } from 'next/navigation';
 
 export default function Pagination() {
     const router = useRouter();

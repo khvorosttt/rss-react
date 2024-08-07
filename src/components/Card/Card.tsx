@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react';
 import { AnimalBody } from '../../services/types';
 import { addSelectedCard, removeSelectedCard } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 interface CardProps {
     animal: AnimalBody;

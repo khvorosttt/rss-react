@@ -4,13 +4,12 @@ import { getFieldStatus } from '../../utils/constants';
 import { updateCurrentCardDetail } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
 import { AnimalBody } from '../../services/types';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ThemeContext } from '../../utils/ThemeProvider';
 
 export default function CardDetail() {
     const searchParams = useSearchParams();
-    const pageId = searchParams.get('page') || '0';
+    const pageId = searchParams!.get('page') || '0';
     const router = useRouter();
     const dispatch = useDispatch();
     const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
