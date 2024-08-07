@@ -1,16 +1,16 @@
 import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import renderWithProviders from './renderWithProviders';
-import NotFoundPage from '../pages/404';
-import { useRouter } from 'next/router';
 import { Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import NotFoundPage from '../app/not-found';
+import { useRouter } from 'next/navigation';
 
 vi.mock('react-router', () => ({
     useSelector: vi.fn(),
 }));
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
     useRouter: vi.fn(),
 }));
 

@@ -6,19 +6,15 @@ import CardDetail from '../components/CardDetail/CardDetail';
 import { testAnimals } from './data';
 import { updateCurrentCardDetail } from '../services/features/animalsSlice';
 import { getFieldStatus } from '../utils/constants';
-import { useRouter } from 'next/router';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 vi.mock('react-router', () => ({
     useSelector: vi.fn(),
 }));
 
-vi.mock('next/router', () => ({
-    useRouter: vi.fn(),
-}));
-
 vi.mock('next/navigation', () => ({
     useSearchParams: vi.fn(),
+    useRouter: vi.fn(),
 }));
 
 describe('test card detail component', () => {

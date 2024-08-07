@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import RootLayout from '../pages/layout';
+import RootLayout from '../app/layout';
 
 describe('test layout', () => {
     it('should display layout', () => {

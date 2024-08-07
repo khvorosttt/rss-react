@@ -5,13 +5,13 @@ import renderWithProviders from './renderWithProviders';
 import Pagination from '../components/Pagination/Pagination';
 import { updateAnimals } from '../services/features/animalsSlice';
 import { testAnimals, testPageInfo } from './data';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 vi.mock('react-router', () => ({
     useSelector: vi.fn(),
 }));
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
     useRouter: vi.fn(),
 }));
 

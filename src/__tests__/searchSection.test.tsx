@@ -4,9 +4,9 @@ import userEvent from '@testing-library/user-event';
 import SearchSection from '../components/SearchSection/SearchSection';
 import renderWithProviders from './renderWithProviders';
 import { updateSearchQuery } from '../services/features/animalsSlice';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
     useRouter: vi.fn(),
 }));
 

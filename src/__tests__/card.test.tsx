@@ -7,9 +7,9 @@ import { testAnimals } from './data';
 import renderWithProviders from './renderWithProviders';
 import currentStore from '../store/store';
 import { ThemeVariant } from '../utils/ThemeProvider';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
     useRouter: vi.fn(),
 }));
 

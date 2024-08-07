@@ -4,23 +4,25 @@ import renderWithProviders from './renderWithProviders';
 import { elementsOnPage } from '../services/types';
 import { updateAnimals } from '../services/features/animalsSlice';
 import { testAnimals, testPageInfo } from './data';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Mock } from 'vitest';
 
 vi.mock('react-router', () => ({
     useSelector: vi.fn(),
 }));
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
+    useSearchParams: vi.fn(),
     useRouter: vi.fn(),
 }));
 
-vi.mock('next/navigation', () => ({
-    useSearchParams: vi.fn(),
-}));
-
 describe('test result section', () => {
+    const mockPush = vi.fn();
+
     beforeEach(() => {
+        (useRouter as Mock).mockReturnValue({
+            push: mockPush,
+        });
         (useSearchParams as Mock).mockReturnValue({
             get: (value: string) => {
                 return value;
