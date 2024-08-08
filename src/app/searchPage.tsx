@@ -1,18 +1,21 @@
 'use client';
 
 import { useDispatch } from 'react-redux';
-import { AnimalBody, ResponseBody } from '../services/types';
+import { AnimalResponse, ResponseBody } from '../services/types';
 import { updateAnimals, updateCurrentCardDetail, updateSearchQuery } from '../services/features/animalsSlice';
 import SearchSection from '../components/SearchSection/SearchSection';
 import ResultSection from '../components/ResultSection/ResultSection';
 import CardDetail from '../components/CardDetail/CardDetail';
 import Pagination from '../components/Pagination/Pagination';
 import SelectedPanel from '../components/SelectedPanel/SelectedPanel';
+import { useEffect } from 'react';
+import Loader from '../components/Loader/Loader';
+import useLoader from '../utils/hooks/useLoader';
 
 export interface PageDataInfo {
     data: ResponseBody;
     searchQuery: string;
-    detail?: AnimalBody;
+    detail?: AnimalResponse;
 }
 
 export interface SearchPageProps {
@@ -21,17 +24,21 @@ export interface SearchPageProps {
 
 export default function SearchPage({ info }: SearchPageProps) {
     const dispatch = useDispatch();
-    dispatch(updateAnimals(info.data));
-    dispatch(updateSearchQuery(info.searchQuery));
-    if (info.detail) {
-        dispatch(updateCurrentCardDetail(info.detail));
-    }
+    const resultLoading = useLoader();
+
+    useEffect(() => {
+        dispatch(updateAnimals(info.data));
+        dispatch(updateSearchQuery(info.searchQuery));
+        if (info.detail) {
+            dispatch(updateCurrentCardDetail(info.detail.animal));
+        }
+    }, [dispatch, info.data, info.searchQuery, info.detail]);
 
     return (
         <div className="search-container">
             <SearchSection />
             <div className="result-container">
-                <ResultSection />
+                {resultLoading ? <Loader /> : <ResultSection />}
                 <div id="detail">{info.detail ? <CardDetail /> : null}</div>
             </div>
             <Pagination />
