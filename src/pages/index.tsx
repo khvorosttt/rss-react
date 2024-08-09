@@ -4,7 +4,7 @@ import ResultSection from '../components/ResultSection/ResultSection';
 import SearchSection from '../components/SearchSection/SearchSection';
 import SelectedPanel from '../components/SelectedPanel/SelectedPanel';
 import { getAnimal, getAnimalsByName } from '../services/api/animalsApi';
-import { AnimalBody, ResponseBody } from '../services/types';
+import { AnimalResponse, ResponseBody } from '../services/types';
 import { useDispatch } from 'react-redux';
 import { updateAnimals, updateCurrentCardDetail, updateSearchQuery } from '../services/features/animalsSlice';
 import CardDetail from '../components/CardDetail/CardDetail';
@@ -24,7 +24,7 @@ export const getServerSideProps = async (context: { query: ContextInfo }) => {
     const data: ResponseBody = await getAnimalsByName(searchQuery, page);
 
     if (detailId) {
-        const detail: AnimalBody = await getAnimal(detailId);
+        const detail: AnimalResponse = await getAnimal(detailId);
         return {
             props: {
                 info: {
@@ -52,7 +52,7 @@ export default function SearchPage({ info }: InferGetServerSidePropsType<typeof 
     dispatch(updateAnimals(info.data));
     dispatch(updateSearchQuery(info.searchQuery));
     if (info.detail) {
-        dispatch(updateCurrentCardDetail(info.detail));
+        dispatch(updateCurrentCardDetail(info.detail.animal));
     }
 
     return (
