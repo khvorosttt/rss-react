@@ -21,7 +21,7 @@ describe('test searchSection componenr', () => {
     });
 
     it('should change input value and searchQuery on the store', async () => {
-        const { store } = renderWithProviders(<SearchSection />);
+        const { store } = renderWithProviders(<SearchSection searchQuery={''} />);
         expect(store.getState().animals.searchQuery).toEqual('');
         await act(() => store.dispatch(updateSearchQuery('test')));
         expect(store.getState().animals.searchQuery).toEqual('test');
@@ -32,7 +32,7 @@ describe('test searchSection componenr', () => {
     });
 
     it('should work clicking on search button', async () => {
-        renderWithProviders(<SearchSection />);
+        renderWithProviders(<SearchSection searchQuery={''} />);
         const searchButton = screen.getByText(/Search/i);
         await userEvent.click(searchButton);
         expect(mockPush).toHaveBeenCalledWith('/?page=0&searchQuery=');
