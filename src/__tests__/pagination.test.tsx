@@ -26,7 +26,7 @@ describe('test pagination component', () => {
     });
 
     it('should go to previous page', async () => {
-        const { store } = renderWithProviders(<Pagination />);
+        const { store } = renderWithProviders(<Pagination pageInfo={testPageInfo} />);
         await act(() => store.dispatch(updateAnimals({ animals: testAnimals, page: testPageInfo })));
         const prev = screen.getByText('Prev');
         await userEvent.click(prev);
@@ -34,7 +34,7 @@ describe('test pagination component', () => {
     });
 
     it('should go to next page', async () => {
-        const { store } = renderWithProviders(<Pagination />);
+        const { store } = renderWithProviders(<Pagination pageInfo={testPageInfo} />);
         await act(() => store.dispatch(updateAnimals({ animals: testAnimals, page: testPageInfo })));
         const next = screen.getByText('Next');
         await userEvent.click(next);

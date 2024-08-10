@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { ChangeEvent } from 'react';
 import { AnimalBody } from '../../services/types';
-import { addSelectedCard, removeSelectedCard } from '../../services/features/animalsSlice';
+import { addSelectedCard, removeSelectedCard, updateDetailLoading } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
 import { useRouter } from 'next/navigation';
 
@@ -34,6 +34,7 @@ export default function Card({ animal, pageId, theme }: CardProps) {
     };
 
     const showDetailHandler = () => {
+        dispatch(updateDetailLoading(true));
         router.push(`/?page=${pageId}&searchQuery=${searchQuery}&detailId=${animal.uid}`);
     };
 

@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { ChangeEvent, useContext, useState } from 'react';
-import { updateSearchQuery } from '../../services/features/animalsSlice';
+import { updateLoading } from '../../services/features/animalsSlice';
 import { ThemeContext } from '../../utils/ThemeProvider';
 import { useRouter } from 'next/navigation';
 
@@ -11,8 +11,10 @@ export default function SearchSection({ searchQuery }: { searchQuery: string }) 
     const { theme } = useContext(ThemeContext);
 
     const clickSearchButtonHandler = () => {
-        dispatch(updateSearchQuery(searchQuery));
-        router.push(`/?page=0&searchQuery=${inputValue}`);
+        if (inputValue !== searchQuery) {
+            dispatch(updateLoading(true));
+            router.push(`/?page=0&searchQuery=${inputValue}`);
+        }
     };
 
     const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {

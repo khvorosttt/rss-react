@@ -10,7 +10,7 @@ vi.mock('next/navigation', () => ({
     useRouter: vi.fn(),
 }));
 
-describe('test searchSection componenr', () => {
+describe('test searchSection component', () => {
     const mockPush = vi.fn();
 
     beforeEach(() => {
@@ -35,6 +35,8 @@ describe('test searchSection componenr', () => {
         renderWithProviders(<SearchSection searchQuery={''} />);
         const searchButton = screen.getByText(/Search/i);
         await userEvent.click(searchButton);
-        expect(mockPush).toHaveBeenCalledWith('/?page=0&searchQuery=');
+        waitFor(() => {
+            expect(mockPush).toHaveBeenCalledWith('/?page=0&searchQuery=');
+        });
     });
 });

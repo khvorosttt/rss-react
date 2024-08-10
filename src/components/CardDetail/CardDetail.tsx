@@ -1,28 +1,42 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { getFieldStatus } from '../../utils/constants';
-import { updateCurrentCardDetail } from '../../services/features/animalsSlice';
-import { RootState } from '../../store/store';
 import { AnimalBody } from '../../services/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ThemeContext } from '../../utils/ThemeProvider';
+import { RootState } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../Loader/Loader';
+import { updateDetailLoading } from '../../services/features/animalsSlice';
 
-export default function CardDetail() {
+export interface CardDetailProps {
+    searchQuery: string;
+    currentCardDetail: AnimalBody | undefined;
+}
+
+export default function CardDetail({ cardInfo }: { cardInfo: CardDetailProps }) {
     const searchParams = useSearchParams();
     const pageId = searchParams!.get('page') || '0';
     const router = useRouter();
-    const dispatch = useDispatch();
-    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
-    const currentCardDetail: AnimalBody | null = useSelector((state: RootState) => state.animals.currentCardDetail);
     const { theme } = useContext(ThemeContext);
+    const dispatch = useDispatch();
+    const isLoading = useSelector((state: RootState) => state.animals.detailLoading);
+
+    useEffect(() => {
+        if (cardInfo) {
+            dispatch(updateDetailLoading(false));
+        }
+    }, [dispatch, cardInfo]);
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     const clickCloseHandler = () => {
-        dispatch(updateCurrentCardDetail(null));
-        router.push(`/?page=${pageId}&searchQuery=${searchQuery}`);
+        router.push(`/?page=${pageId}&searchQuery=${cardInfo.searchQuery}`);
     };
 
-    if (currentCardDetail) {
-        const { name, earthAnimal, earthInsect, avian, canine, feline } = currentCardDetail;
+    if (cardInfo.currentCardDetail) {
+        const { name, earthAnimal, earthInsect, avian, canine, feline } = cardInfo.currentCardDetail;
         return (
             <div className={`detail-container ${theme}-card`}>
                 <div className="card-detail">

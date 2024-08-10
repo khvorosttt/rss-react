@@ -2,7 +2,7 @@ import { act, screen, waitFor } from '@testing-library/react';
 import { Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import renderWithProviders from './renderWithProviders';
-import CardDetail from '../components/CardDetail/CardDetail';
+import CardDetail, { CardDetailProps } from '../components/CardDetail/CardDetail';
 import { testAnimals } from './data';
 import { updateCurrentCardDetail } from '../services/features/animalsSlice';
 import { getFieldStatus } from '../utils/constants';
@@ -19,6 +19,10 @@ vi.mock('next/navigation', () => ({
 
 describe('test card detail component', () => {
     const mockPush = vi.fn();
+    const cardInfo: CardDetailProps = {
+        searchQuery: 'test',
+        currentCardDetail: testAnimals[0],
+    };
 
     beforeEach(() => {
         (useRouter as Mock).mockReturnValue({
@@ -32,7 +36,7 @@ describe('test card detail component', () => {
     });
 
     it('should display detail about animal', async () => {
-        const { store } = renderWithProviders(<CardDetail />);
+        const { store } = renderWithProviders(<CardDetail cardInfo={cardInfo} />);
         await act(() => store.dispatch(updateCurrentCardDetail(testAnimals[0])));
         await waitFor(() => {
             expect(screen.getByText('Animal')).toBeInTheDocument();
@@ -46,10 +50,10 @@ describe('test card detail component', () => {
     });
 
     it('should click close button', async () => {
-        const { store } = renderWithProviders(<CardDetail />);
+        const { store } = renderWithProviders(<CardDetail cardInfo={cardInfo} />);
         act(() => store.dispatch(updateCurrentCardDetail(testAnimals[0])));
         const closeButton = screen.getByText(/Close/i);
         await userEvent.click(closeButton);
-        expect(mockPush).toHaveBeenCalledWith('/?page=0&searchQuery=');
+        expect(mockPush).toHaveBeenCalledWith(`/?page=0&searchQuery=${cardInfo.searchQuery}`);
     });
 });

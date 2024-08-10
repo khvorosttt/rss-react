@@ -1,7 +1,7 @@
 import { waitFor, screen } from '@testing-library/react';
 import ResultSection from '../components/ResultSection/ResultSection';
 import renderWithProviders from './renderWithProviders';
-import { elementsOnPage } from '../services/types';
+import { elementsOnPage, ResponseBody } from '../services/types';
 import { updateAnimals } from '../services/features/animalsSlice';
 import { testAnimals, testPageInfo } from './data';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -18,6 +18,14 @@ vi.mock('next/navigation', () => ({
 
 describe('test result section', () => {
     const mockPush = vi.fn();
+    const info: ResponseBody = {
+        animals: testAnimals.slice(0, elementsOnPage),
+        page: testPageInfo,
+    };
+    const emptyInfo: ResponseBody = {
+        animals: [],
+        page: testPageInfo,
+    };
 
     beforeEach(() => {
         (useRouter as Mock).mockReturnValue({
@@ -31,7 +39,7 @@ describe('test result section', () => {
     });
 
     it(`should display ${elementsOnPage} on page`, async () => {
-        const { store } = renderWithProviders(<ResultSection />);
+        const { store } = renderWithProviders(<ResultSection info={info} />);
         store.dispatch(updateAnimals({ animals: testAnimals.slice(0, elementsOnPage), page: testPageInfo }));
         await waitFor(() => {
             expect(screen.getAllByRole('button').length).toBe(elementsOnPage);
@@ -39,7 +47,7 @@ describe('test result section', () => {
     });
 
     it(`should display empty message`, async () => {
-        renderWithProviders(<ResultSection />);
+        renderWithProviders(<ResultSection info={emptyInfo} />);
         await waitFor(() => {
             expect(screen.getByText(/No results were found for your request/i)).toBeInTheDocument();
         });
