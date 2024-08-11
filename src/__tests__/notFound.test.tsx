@@ -1,38 +1,37 @@
-import { Navigate, RouterProvider, createMemoryRouter } from 'react-router-dom';
-import { act, render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import NotFound from '../Page/NotFoundPage/NotFoundPage';
-import SearchPage from '../Page/SearchPage/SearchPage';
-import CardDetail from '../components/CardDetail/CardDetail';
+import renderWithProviders from './renderWithProviders';
+import { Mock } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import NotFoundPage from '../app/not-found';
+import { useRouter } from 'next/navigation';
+
+vi.mock('react-router', () => ({
+    useSelector: vi.fn(),
+}));
+
+vi.mock('next/navigation', () => ({
+    useRouter: vi.fn(),
+}));
 
 describe('Not Found Page Test', () => {
-    test('should show page not found with invalid address', async () => {
-        const routes = [
-            {
-                path: '/',
-                element: <Navigate to="/page/1" replace />,
-                errorElement: <NotFound />,
-            },
-            {
-                path: '/page/:pageId',
-                element: <SearchPage />,
-                errorElement: <NotFound />,
-                children: [
-                    {
-                        path: '',
-                        element: <CardDetail />,
-                        errorElement: <NotFound />,
-                    },
-                ],
-            },
-        ];
+    const mockPush = vi.fn();
 
-        const router = createMemoryRouter(routes, {
-            initialEntries: ['/', '/page/0'],
+    beforeEach(() => {
+        (useRouter as Mock).mockReturnValue({
+            push: mockPush,
         });
+    });
 
-        render(<RouterProvider router={router} />);
-        await act(async () => router.navigate('/test'));
+    test('should show page not found with invalid address', async () => {
+        renderWithProviders(<NotFoundPage />);
         expect(screen.getByText('Oops... The page corresponding to this address was not found.')).toBeInTheDocument();
+    });
+
+    test('should go back to the page with animals', async () => {
+        renderWithProviders(<NotFoundPage />);
+        const backButton = screen.getByText(/Back to animals list/i);
+        await userEvent.click(backButton);
+        expect(mockPush).toHaveBeenCalledWith('/?page=0&searchQuery=');
     });
 });

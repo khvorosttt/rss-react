@@ -8,6 +8,8 @@ export interface AnimalsState {
     animals: AnimalBody[];
     pageInfo: PageInfo;
     selectedAnimals: AnimalBody[];
+    isLoading: boolean;
+    detailLoading: boolean;
 }
 
 export const initialAnimalsState: AnimalsState = {
@@ -16,12 +18,20 @@ export const initialAnimalsState: AnimalsState = {
     animals: [],
     pageInfo: initPageInfo,
     selectedAnimals: [],
+    isLoading: false,
+    detailLoading: false,
 };
 
 export const animalsSlice = createSlice({
     name: 'animals',
     initialState: initialAnimalsState,
     reducers: {
+        updateDetailLoading(state, action) {
+            return { ...state, detailLoading: action.payload };
+        },
+        updateLoading(state, action) {
+            return { ...state, isLoading: action.payload };
+        },
         updateSearchQuery(state, action) {
             return { ...state, searchQuery: action.payload };
         },
@@ -47,6 +57,8 @@ export const animalsSlice = createSlice({
 });
 
 export const {
+    updateDetailLoading,
+    updateLoading,
     updateSearchQuery,
     updateAnimals,
     updateCurrentCardDetail,

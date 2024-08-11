@@ -6,9 +6,11 @@ module.exports = {
     },
     ignorePatterns: ['dist', '.eslintrc.cjs'],
     parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+    },
     extends: [
-        'airbnb',
-        'airbnb-typescript',
         'eslint:recommended',
         'plugin:react/recommended',
         'plugin:@typescript-eslint/recommended',
@@ -16,6 +18,8 @@ module.exports = {
         'plugin:prettier/recommended',
         'plugin:react/jsx-runtime',
         'prettier',
+        'next',
+        'next/core-web-vitals',
     ],
     overrides: [
         {
@@ -28,17 +32,10 @@ module.exports = {
             },
         },
     ],
-    parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        project: ['./tsconfig.json', './tsconfig.app.json', './tsconfig.node.json'],
-    },
     plugins: ['react', 'react-compiler', 'prettier', 'import', '@typescript-eslint'],
     rules: {
-        'no-unused-vars': 'error',
         '@typescript-eslint/no-explicit-any': 'error',
         'react-compiler/react-compiler': 'error',
         'prettier/prettier': 'error',
-        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
 };

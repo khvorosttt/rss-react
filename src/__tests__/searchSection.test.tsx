@@ -1,31 +1,27 @@
-import { MemoryRouter } from 'react-router-dom';
-import { useNavigate } from 'react-router';
 import { Mock } from 'vitest';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SearchSection from '../components/SearchSection/SearchSection';
 import renderWithProviders from './renderWithProviders';
 import { updateSearchQuery } from '../services/features/animalsSlice';
+import { useRouter } from 'next/navigation';
 
-vi.mock('react-router', () => ({
-    useParams: () => ({ pageId: '1' }),
-    useNavigate: vi.fn(),
+vi.mock('next/navigation', () => ({
+    useRouter: vi.fn(),
 }));
 
-describe('test searchSection componenr', () => {
-    const mockNavigate = vi.fn();
+describe('test searchSection component', () => {
+    const mockPush = vi.fn();
 
     beforeEach(() => {
-        (useNavigate as Mock).mockReturnValue(mockNavigate);
+        (useRouter as Mock).mockReturnValue({
+            push: mockPush,
+        });
         vi.clearAllMocks();
     });
 
     it('should change input value and searchQuery on the store', async () => {
-        const { store } = renderWithProviders(
-            <MemoryRouter initialEntries={['?page=0']}>
-                <SearchSection />
-            </MemoryRouter>
-        );
+        const { store } = renderWithProviders(<SearchSection searchQuery={''} />);
         expect(store.getState().animals.searchQuery).toEqual('');
         await act(() => store.dispatch(updateSearchQuery('test')));
         expect(store.getState().animals.searchQuery).toEqual('test');
@@ -36,13 +32,11 @@ describe('test searchSection componenr', () => {
     });
 
     it('should work clicking on search button', async () => {
-        renderWithProviders(
-            <MemoryRouter initialEntries={['?page=0']}>
-                <SearchSection />
-            </MemoryRouter>
-        );
+        renderWithProviders(<SearchSection searchQuery={''} />);
         const searchButton = screen.getByText(/Search/i);
         await userEvent.click(searchButton);
-        expect(mockNavigate).toHaveBeenCalledWith('/page/0');
+        waitFor(() => {
+            expect(mockPush).toHaveBeenCalledWith('/?page=0&searchQuery=');
+        });
     });
 });

@@ -1,37 +1,35 @@
-import { useParams } from 'react-router';
-import { useSelector } from 'react-redux';
-import { useContext } from 'react';
-import { AnimalBody } from '../../services/types';
+import { ResponseBody } from '../../services/types';
 import Card from '../Card/Card';
-import Loader from '../Loader/Loader';
-import './resultSection.css';
-import { useGetAnimalsByNameQuery } from '../../services/api/animalsApi';
+import { ThemeContext } from '../../utils/ThemeProvider';
+import { useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateLoading } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
-import { ThemeContext, ThemeVariant } from '../../utils/constants';
+import Loader from '../Loader/Loader';
 
-export default function ResultSection() {
-    const { pageId } = useParams<{ pageId: string }>();
-    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
-    const { isFetching, isError } = useGetAnimalsByNameQuery({
-        name: searchQuery,
-        pageNumber: Number(pageId),
-    });
-    const animals: AnimalBody[] = useSelector((state: RootState) => state.animals.animals);
-    const theme: ThemeVariant = useContext(ThemeContext);
+export default function ResultSection({ info }: { info: ResponseBody }) {
+    const { animals, page } = info;
+    const { theme } = useContext(ThemeContext);
+    const dispatch = useDispatch();
+    const isLoading = useSelector((state: RootState) => state.animals.isLoading);
 
-    if (isFetching) {
+    useEffect(() => {
+        if (info) {
+            dispatch(updateLoading(false));
+        }
+    }, [dispatch, info]);
+
+    if (isLoading) {
         return <Loader />;
-    }
-
-    if (isError) {
-        return <div>Error loading animal data</div>;
     }
 
     return (
         <div className="result-section">
-            {animals && animals.length !== 0
+            {animals.length !== 0
                 ? animals.map((value) => {
-                      return <Card key={value.uid} animal={value} pageId={pageId} theme={`${theme}`} />;
+                      return (
+                          <Card key={value.uid} animal={value} pageId={page.pageNumber.toString()} theme={`${theme}`} />
+                      );
                   })
                 : 'No results were found for your request'}
         </div>

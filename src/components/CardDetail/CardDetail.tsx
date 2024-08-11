@@ -1,46 +1,42 @@
-import { useNavigate, useParams } from 'react-router';
-import { useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { useContext, useEffect } from 'react';
-import Loader from '../Loader/Loader';
-import './cardDetail.css';
-import { getFieldStatus, SearchParams, ThemeContext, ThemeVariant } from '../../utils/constants';
-import { useGetAnimalByIdQuery } from '../../services/api/animalsApi';
-import { updateCurrentCardDetail } from '../../services/features/animalsSlice';
-import { RootState } from '../../store/store';
+import { getFieldStatus } from '../../utils/constants';
 import { AnimalBody } from '../../services/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ThemeContext } from '../../utils/ThemeProvider';
+import { RootState } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../Loader/Loader';
+import { updateDetailLoading } from '../../services/features/animalsSlice';
 
-export default function CardDetail() {
-    const { pageId } = useParams<{ pageId: string }>();
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const detailId = searchParams.get(SearchParams.detail);
-    const { data, isFetching, isError } = useGetAnimalByIdQuery(detailId!);
+export interface CardDetailProps {
+    searchQuery: string;
+    currentCardDetail: AnimalBody | undefined;
+}
+
+export default function CardDetail({ cardInfo }: { cardInfo: CardDetailProps }) {
+    const searchParams = useSearchParams();
+    const pageId = searchParams!.get('page') || '0';
+    const router = useRouter();
+    const { theme } = useContext(ThemeContext);
     const dispatch = useDispatch();
-    const currentCardDetail: AnimalBody | null = useSelector((state: RootState) => state.animals.currentCardDetail);
-    const theme: ThemeVariant = useContext(ThemeContext);
+    const isLoading = useSelector((state: RootState) => state.animals.detailLoading);
 
     useEffect(() => {
-        if (detailId && data && data.animal) {
-            dispatch(updateCurrentCardDetail(data.animal));
+        if (cardInfo) {
+            dispatch(updateDetailLoading(false));
         }
-    }, [detailId, data, dispatch]);
+    }, [dispatch, cardInfo]);
 
-    const clickCloseHandler = () => {
-        dispatch(updateCurrentCardDetail(null));
-        navigate(`/page/${pageId}`);
-    };
-
-    if (isFetching) {
+    if (isLoading) {
         return <Loader />;
     }
 
-    if (isError) {
-        return <div>Error loading animal data</div>;
-    }
+    const clickCloseHandler = () => {
+        router.push(`/?page=${pageId}&searchQuery=${cardInfo.searchQuery}`);
+    };
 
-    if (currentCardDetail) {
-        const { name, earthAnimal, earthInsect, avian, canine, feline } = currentCardDetail;
+    if (cardInfo.currentCardDetail) {
+        const { name, earthAnimal, earthInsect, avian, canine, feline } = cardInfo.currentCardDetail;
         return (
             <div className={`detail-container ${theme}-card`}>
                 <div className="card-detail">

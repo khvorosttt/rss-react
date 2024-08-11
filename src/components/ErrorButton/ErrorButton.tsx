@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ThemeVariant } from '../../utils/constants';
+import { ThemeVariant } from '../../utils/ThemeProvider';
 
 interface ErrorButtonProps {
     theme: ThemeVariant;
