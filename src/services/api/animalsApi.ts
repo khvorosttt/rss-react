@@ -1,24 +1,25 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AnimalResponse, RequestBody, ResponseBody } from '../types';
+import { POSTOptions } from '../types';
 
-export const animalsApi = createApi({
-    reducerPath: 'animalsApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://stapi.co/api/v1/rest' }),
-    endpoints: (builder) => ({
-        getAnimalsByName: builder.query<ResponseBody, RequestBody>({
-            query: (request: RequestBody) => ({
-                url: `/animal/search/?pageNumber=${request.pageNumber}&pageSize=9`,
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `name=${request.name}`,
-            }),
-        }),
-        getAnimalById: builder.query<AnimalResponse, string>({
-            query: (detailId: string) => `/animal?uid=${detailId}`,
-        }),
-    }),
-});
+export async function getAnimalsByName(animalName: string, pageNumber: number = 0) {
+    try {
+        const response = await fetch(
+            `https://stapi.co/api/v1/rest/animal/search?pageNumber=${pageNumber}&pageSize=9`,
+            POSTOptions(animalName)
+        );
+        const data = await response.json();
+        return data;
+    } catch {
+        throw new Error('Fetch failed');
+    }
+}
 
-export const { useGetAnimalsByNameQuery, useLazyGetAnimalsByNameQuery, useGetAnimalByIdQuery } = animalsApi;
+export async function getAnimal(detailId: string) {
+    try {
+        const data = await fetch(`https://stapi.co/api/v1/rest/animal?uid=${detailId}`).then((response) =>
+            response.json()
+        );
+        return data;
+    } catch (error) {
+        throw new Error('Fetch failed');
+    }
+}

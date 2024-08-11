@@ -1,35 +1,25 @@
+import { useSearchParams } from '@remix-run/react';
 import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { PageInfo } from '../../services/types';
+import { ThemeContext } from '../../utils/ThemeProvider';
 import './pagination.css';
-import { RootState } from '../../store/store';
-import { useLazyGetAnimalsByNameQuery } from '../../services/api/animalsApi';
-import { updateAnimals } from '../../services/features/animalsSlice';
-import { ThemeContext, ThemeVariant } from '../../utils/constants';
 
-export default function Pagination() {
+export default function Pagination({ pageInfo }: { pageInfo: PageInfo }) {
     const navigate = useNavigate();
-    const pageInfo: PageInfo = useSelector((state: RootState) => state.animals.pageInfo);
-    const [, { data, isFetching }] = useLazyGetAnimalsByNameQuery();
-    const dispatch = useDispatch();
-    const theme: ThemeVariant = useContext(ThemeContext);
-
-    useEffect(() => {
-        if (!isFetching && data) {
-            dispatch(updateAnimals({ animals: data.animals, page: data.page }));
-        }
-    }, [data, isFetching, dispatch]);
+    const [searchParams] = useSearchParams();
+    const searchQuery = searchParams.get('searchQuery') || '';
+    const { theme } = useContext(ThemeContext);
 
     const prevClickHandler = () => {
         if (pageInfo && !pageInfo.firstPage) {
-            navigate(`/page/${Number(pageInfo.pageNumber) - 1}`);
+            navigate(`/?page=${Number(pageInfo.pageNumber) - 1}&searchQuery=${searchQuery}`);
         }
     };
 
     const nextClickHandler = () => {
         if (pageInfo && !pageInfo.lastPage) {
-            navigate(`/page/${Number(pageInfo.pageNumber) + 1}`);
+            navigate(`/?page=${Number(pageInfo.pageNumber) + 1}&searchQuery=${searchQuery}`);
         }
     };
 

@@ -1,46 +1,29 @@
-import { useNavigate, useParams } from 'react-router';
-import { useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useContext, useEffect } from 'react';
-import Loader from '../Loader/Loader';
+import { useContext } from 'react';
+import { useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
+import { getFieldStatus } from '../../utils/constants';
+import { AnimalResponse } from '../../services/types';
+import { ThemeContext } from '../../utils/ThemeProvider';
 import './cardDetail.css';
-import { getFieldStatus, SearchParams, ThemeContext, ThemeVariant } from '../../utils/constants';
-import { useGetAnimalByIdQuery } from '../../services/api/animalsApi';
-import { updateCurrentCardDetail } from '../../services/features/animalsSlice';
-import { RootState } from '../../store/store';
-import { AnimalBody } from '../../services/types';
+import Loader from '../Loader/Loader';
 
-export default function CardDetail() {
-    const { pageId } = useParams<{ pageId: string }>();
-    const navigate = useNavigate();
+export default function CardDetail({ cardInfo }: { cardInfo: AnimalResponse }) {
     const [searchParams] = useSearchParams();
-    const detailId = searchParams.get(SearchParams.detail);
-    const { data, isFetching, isError } = useGetAnimalByIdQuery(detailId!);
-    const dispatch = useDispatch();
-    const currentCardDetail: AnimalBody | null = useSelector((state: RootState) => state.animals.currentCardDetail);
-    const theme: ThemeVariant = useContext(ThemeContext);
-
-    useEffect(() => {
-        if (detailId && data && data.animal) {
-            dispatch(updateCurrentCardDetail(data.animal));
-        }
-    }, [detailId, data, dispatch]);
+    const searchQuery = searchParams.get('searchQuery') || '';
+    const pageId = searchParams.get('page') || '0';
+    const navigate = useNavigate();
+    const navigation = useNavigation();
+    const { theme } = useContext(ThemeContext);
 
     const clickCloseHandler = () => {
-        dispatch(updateCurrentCardDetail(null));
-        navigate(`/page/${pageId}`);
+        navigate(`/?page=${pageId}&searchQuery=${searchQuery}`);
     };
 
-    if (isFetching) {
+    if (navigation.state === 'loading') {
         return <Loader />;
     }
 
-    if (isError) {
-        return <div>Error loading animal data</div>;
-    }
-
-    if (currentCardDetail) {
-        const { name, earthAnimal, earthInsect, avian, canine, feline } = currentCardDetail;
+    if (cardInfo.animal) {
+        const { name, earthAnimal, earthInsect, avian, canine, feline } = cardInfo.animal;
         return (
             <div className={`detail-container ${theme}-card`}>
                 <div className="card-detail">

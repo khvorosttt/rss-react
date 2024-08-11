@@ -42,20 +42,20 @@
 }
 
 .dark-button {
-    background-color: rgb(153,21,5, 0.8);
-    border: 1px solid rgb(153,21,5);
+    background-color: rgb(153, 21, 5, 0.8);
+    border: 1px solid rgb(153, 21, 5);
     color: white;
 }
 
 .light-button:hover {
-    background-color:#c7ae88;
+    background-color: #c7ae88;
     border: 1px solid #c7ae88;
     color: black;
 }
 
 .dark-button:hover {
-    background-color:rgb(153,21,5);
-    border: 1px solid rgb(153,21,5);
+    background-color: rgb(153, 21, 5);
+    border: 1px solid rgb(153, 21, 5);
     color: white;
 }
 
@@ -73,8 +73,8 @@
 
 .dark-button:disabled:hover {
     opacity: 0.7;
-    background-color: rgb(153,21,5, 0.8);
-    border: 1px solid rgb(153,21,5);
+    background-color: rgb(153, 21, 5, 0.8);
+    border: 1px solid rgb(153, 21, 5);
 }
 
 .light-checkbox {
@@ -82,10 +82,10 @@
 }
 
 .dark-checkbox {
-    accent-color: rgb(153,21,5);
+    accent-color: rgb(153, 21, 5);
 }
 
-@media (max-width:500px) {
+@media (max-width: 500px) {
     .card {
         width: 80px;
         height: auto;
