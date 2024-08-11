@@ -6,8 +6,8 @@ import userEvent from '@testing-library/user-event';
 import Card from '../components/Card/Card';
 import { testAnimals } from './data';
 import renderWithProviders from './renderWithProviders';
-import { ThemeVariant } from '../utils/constants';
 import currentStore from '../store/store';
+import { ThemeVariant } from '../utils/ThemeProvider';
 
 describe('test Card component', () => {
     it('should render the animal name', () => {
@@ -32,7 +32,9 @@ describe('test Card component', () => {
             userEvent.click(card);
         });
         await waitFor(() => {
-            expect(window.location.pathname + window.location.search).toBe(`/page/0/?detail=${testAnimals[0].uid}`);
+            expect(window.location.pathname + window.location.search).toBe(
+                `/?page=0&searchQuery=&detail=${testAnimals[0].uid}`
+            );
         });
     });
 

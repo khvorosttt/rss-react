@@ -1,10 +1,11 @@
 /// <reference types="vitest" />
 import { vitePlugin as remix } from '@remix-run/dev';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [remix()],
+    plugins: [[process.env.VITEST ? react() : remix()]],
     test: {
         globals: true,
         environment: 'jsdom',

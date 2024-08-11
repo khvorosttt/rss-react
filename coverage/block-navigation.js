@@ -11,7 +11,10 @@ var jumpToCode = (function init() {
 
     // Selecter that finds elements on the page to which we can jump
     var selector =
-        fileListingElements.join(', ') + ', ' + notSelector + missingCoverageClasses.join(', ' + notSelector); // becomes `:not(a):not(b) > a, :not(a):not(b) > b`
+        fileListingElements.join(', ') +
+        ', ' +
+        notSelector +
+        missingCoverageClasses.join(', ' + notSelector); // becomes `:not(a):not(b) > a, :not(a):not(b) > b`
 
     // The NodeList of matching elements
     var missingCoverageElements = document.querySelectorAll(selector);
@@ -19,7 +22,9 @@ var jumpToCode = (function init() {
     var currentIndex;
 
     function toggleClass(index) {
-        missingCoverageElements.item(currentIndex).classList.remove('highlighted');
+        missingCoverageElements
+            .item(currentIndex)
+            .classList.remove('highlighted');
         missingCoverageElements.item(index).classList.add('highlighted');
     }
 
@@ -29,7 +34,7 @@ var jumpToCode = (function init() {
         missingCoverageElements.item(index).scrollIntoView({
             behavior: 'smooth',
             block: 'center',
-            inline: 'center',
+            inline: 'center'
         });
     }
 
@@ -47,7 +52,10 @@ var jumpToCode = (function init() {
     function goToNext() {
         var nextIndex = 0;
 
-        if (typeof currentIndex === 'number' && currentIndex < missingCoverageElements.length - 1) {
+        if (
+            typeof currentIndex === 'number' &&
+            currentIndex < missingCoverageElements.length - 1
+        ) {
             nextIndex = currentIndex + 1;
         }
 
@@ -55,7 +63,10 @@ var jumpToCode = (function init() {
     }
 
     return function jump(event) {
-        if (document.getElementById('fileSearch') === document.activeElement && document.activeElement != null) {
+        if (
+            document.getElementById('fileSearch') === document.activeElement &&
+            document.activeElement != null
+        ) {
             // if we're currently focused on the search input, we don't want to navigate
             return;
         }
