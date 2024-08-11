@@ -1,20 +1,26 @@
 import { useContext } from 'react';
-import { useNavigate, useSearchParams } from '@remix-run/react';
+import { useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
 import { getFieldStatus } from '../../utils/constants';
 import { AnimalResponse } from '../../services/types';
 import { ThemeContext } from '../../utils/ThemeProvider';
 import './cardDetail.css';
+import Loader from '../Loader/Loader';
 
 export default function CardDetail({ cardInfo }: { cardInfo: AnimalResponse }) {
     const [searchParams] = useSearchParams();
     const searchQuery = searchParams.get('searchQuery') || '';
     const pageId = searchParams.get('page') || '0';
     const navigate = useNavigate();
+    const navigation = useNavigation();
     const { theme } = useContext(ThemeContext);
 
     const clickCloseHandler = () => {
         navigate(`/?page=${pageId}&searchQuery=${searchQuery}`);
     };
+
+    if (navigation.state === 'loading') {
+        return <Loader />;
+    }
 
     if (cardInfo.animal) {
         const { name, earthAnimal, earthInsect, avian, canine, feline } = cardInfo.animal;
