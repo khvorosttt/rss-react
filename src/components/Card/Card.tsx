@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useSearchParams } from '@remix-run/react';
 import { ChangeEvent } from 'react';
 import { AnimalBody } from '../../services/types';
 import './card.css';
@@ -12,6 +12,8 @@ interface CardProps {
     theme: string;
 }
 export default function Card({ animal, pageId, theme }: CardProps) {
+    const [searchParams] = useSearchParams();
+    const searchQuery = searchParams.get('searchQuery') || '';
     const dispatch = useDispatch();
     const selectedCards: AnimalBody[] = useSelector((state: RootState) => state.animals.selectedAnimals);
 
@@ -40,9 +42,12 @@ export default function Card({ animal, pageId, theme }: CardProps) {
                 checked={isSelected()}
             />
             <div className="card-shot-info">{animal.name}</div>
-            <NavLink className={`details-button ${theme}-button`} to={`/page/${pageId}/?detail=${animal.uid}`}>
+            <Link
+                className={`details-button ${theme}-button`}
+                to={`/?page=${pageId}&searchQuery=${searchQuery}&detail=${animal.uid}`}
+            >
                 Show Details
-            </NavLink>
+            </Link>
         </div>
     );
 }

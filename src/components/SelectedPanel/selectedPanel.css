@@ -26,11 +26,11 @@
 }
 
 .light-panel {
-    background-color: rgb(205,173,126, 0.8);
+    background-color: rgb(205, 173, 126, 0.8);
 }
 
 .dark-panel {
-    background-color:rgb(153,21,5, 0.8);
+    background-color: rgb(153, 21, 5, 0.8);
 }
 
 @media (max-width: 550px) {
@@ -48,5 +48,4 @@
     .dowload-button {
         padding: 5px 10px;
     }
-
 }

@@ -17,7 +17,7 @@
 
 .dark-loader {
     border: 10px solid black;
-    border-top: 10px solid rgb(153,21,5);
+    border-top: 10px solid rgb(153, 21, 5);
 }
 
 @keyframes spin {

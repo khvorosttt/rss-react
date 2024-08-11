@@ -43,4 +43,14 @@ export interface RequestBody {
     pageNumber: number;
 }
 
+export const POSTOptions = (request: string) => {
+    return {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `name=${request}`,
+    };
+};
+
 export const elementsOnPage = 9;
