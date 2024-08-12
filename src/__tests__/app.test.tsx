@@ -1,13 +1,17 @@
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import App from '../App';
-import renderWithProviders from './renderWithProviders';
+import { render, screen } from '@testing-library/react';
+import App from '../pages/_app';
+import { Router } from 'next/router';
 
-describe('test app component', () => {
-    it('should change text in theme button', async () => {
-        renderWithProviders(<App />);
-        const themeButton = screen.getByText('☼');
-        await userEvent.click(themeButton);
-        expect(screen.getByText('☽')).toBeInTheDocument();
+describe('test _app.tsx', () => {
+    const mockComponent = <div>Test component</div>;
+    const mockProps = {
+        Component: () => mockComponent,
+        pageProps: {},
+        router: {} as Router,
+    };
+
+    it('should display component in _app.tsx', () => {
+        render(<App {...mockProps} />);
+        expect(screen.getByText(/Test component/i));
     });
 });

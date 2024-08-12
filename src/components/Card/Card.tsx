@@ -1,10 +1,9 @@
-import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChangeEvent } from 'react';
 import { AnimalBody } from '../../services/types';
-import './card.css';
 import { addSelectedCard, removeSelectedCard } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
+import { useRouter } from 'next/router';
 
 interface CardProps {
     animal: AnimalBody;
@@ -13,6 +12,8 @@ interface CardProps {
 }
 export default function Card({ animal, pageId, theme }: CardProps) {
     const dispatch = useDispatch();
+    const router = useRouter();
+    const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
     const selectedCards: AnimalBody[] = useSelector((state: RootState) => state.animals.selectedAnimals);
 
     const isSelected = () => {
@@ -31,6 +32,10 @@ export default function Card({ animal, pageId, theme }: CardProps) {
         }
     };
 
+    const showDetailHandler = () => {
+        router.push(`/?page=${pageId}&searchQuery=${searchQuery}&detailId=${animal.uid}`);
+    };
+
     return (
         <div className={`card ${theme}-card`}>
             <input
@@ -40,9 +45,9 @@ export default function Card({ animal, pageId, theme }: CardProps) {
                 checked={isSelected()}
             />
             <div className="card-shot-info">{animal.name}</div>
-            <NavLink className={`details-button ${theme}-button`} to={`/page/${pageId}/?detail=${animal.uid}`}>
+            <button className={`details-button ${theme}-button`} onClick={showDetailHandler}>
                 Show Details
-            </NavLink>
+            </button>
         </div>
     );
 }

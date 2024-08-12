@@ -1,42 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
-import { useContext, useEffect } from 'react';
-import ErrorButton from '../ErrorButton/ErrorButton';
-import useSearchQueryRestore from '../../utils/hooks/useSearchQueryRestore';
-import { updateAnimals, updateSearchQuery } from '../../services/features/animalsSlice';
-import { useGetAnimalsByNameQuery } from '../../services/api/animalsApi';
-import './searchSection.css';
-import { ThemeContext, ThemeVariant } from '../../utils/constants';
+import { ChangeEvent, useContext, useState } from 'react';
+import { updateSearchQuery } from '../../services/features/animalsSlice';
 import { RootState } from '../../store/store';
+import { useRouter } from 'next/router';
+import { ThemeContext } from '../../utils/ThemeProvider';
 
 export default function SearchSection() {
-    const { inputValue, setSearchValues, handleChangeInput } = useSearchQueryRestore();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { pageId } = useParams<{ pageId: string }>();
+    const router = useRouter();
     const searchQuery: string = useSelector((state: RootState) => state.animals.searchQuery);
-    const { data, isLoading } = useGetAnimalsByNameQuery({
-        name: searchQuery,
-        pageNumber: Number(pageId),
-    });
-    const theme: ThemeVariant = useContext(ThemeContext);
+    const [inputValue, setInputValue] = useState(searchQuery);
+    const { theme } = useContext(ThemeContext);
 
     const clickSearchButtonHandler = () => {
-        setSearchValues();
-        dispatch(updateSearchQuery(inputValue));
-        navigate(`/page/0`);
+        dispatch(updateSearchQuery(searchQuery));
+        router.push(`/?page=0&searchQuery=${inputValue}`);
     };
 
-    useEffect(() => {
-        if (!isLoading && data) {
-            dispatch(updateAnimals({ animals: data.animals, page: data.page }));
-        }
-    }, [data, isLoading, dispatch]);
-
-    useEffect(() => {
-        setSearchValues();
-        dispatch(updateSearchQuery(inputValue));
-    }, []);
+    const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value.trim());
+    };
 
     return (
         <div className="search-section">
@@ -50,7 +33,6 @@ export default function SearchSection() {
             <button className={`search-button ${theme}-button`} type="button" onClick={clickSearchButtonHandler}>
                 Search
             </button>
-            <ErrorButton theme={theme} />
         </div>
     );
 }

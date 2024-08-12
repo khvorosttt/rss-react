@@ -1,0 +1,10 @@
+@import './app.css';
+@import './searchPage.css';
+@import './notFoundPage.css';
+@import './searchSection.css';
+@import './resultSection.css';
+@import './pagination.css';
+@import './selectedPanel.css';
+@import './card.css';
+@import './cardDetail.css';
+@import './loader.css';
