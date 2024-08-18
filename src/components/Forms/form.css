@@ -1,0 +1,41 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.error {
+    font-size: 12px;
+    color: red;
+    margin: 0px;
+}
+
+.country-container {
+    position: relative;
+    width: 300px;
+}
+
+datalist {
+    position: absolute;
+    max-height: 20em;
+    border: 0 none;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.password-strength {
+    width: 95%;
+    height: 5px;
+}
+
+.low {
+    background: linear-gradient(to right, red 0%, red 33%, white 33%, white 100%);
+}
+
+.middle {
+    background: linear-gradient(to right, yellow 0%, yellow 66%, white 66%, white 100%);
+}
+
+.high {
+    background: linear-gradient(to right, green 0%, green 100%);
+}

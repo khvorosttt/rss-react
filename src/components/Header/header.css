@@ -1,0 +1,16 @@
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    background-color: white;
+    border-bottom: 1px solid black;
+}
+
+.header-link {
+    color: black;
+}
