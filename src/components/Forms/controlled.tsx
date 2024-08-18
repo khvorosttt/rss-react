@@ -7,6 +7,8 @@ import { addFormInfo } from '../../sevices/features/formsSlice';
 import './form.css';
 import { convertToBase64 } from '../../utils/convertToBase64';
 import countries from '../../data/countries';
+import passwordStrength from '../../utils/password-strength';
+import { useState } from 'react';
 
 export default function ControlledForm() {
     const {
@@ -17,6 +19,7 @@ export default function ControlledForm() {
         resolver: yupResolver(schema),
         mode: 'all',
     });
+    const [strength, setStrength] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -49,9 +52,15 @@ export default function ControlledForm() {
             <p className="error">{errors.email ? errors.email.message : ''}</p>
             <label>
                 Password:
-                <input {...register('password')} type="password" placeholder="Password" />
+                <input
+                    {...register('password')}
+                    type="password"
+                    placeholder="Password"
+                    onChange={(event) => setStrength(event.target.value)}
+                />
             </label>
             <p className="error">{errors.password ? errors.password.message : ''}</p>
+            <div className={`password-strength ${passwordStrength(strength)}`} />
             <label>
                 Confirm password:
                 <input {...register('confirmPassword')} type="password" placeholder="Confirm your password" />

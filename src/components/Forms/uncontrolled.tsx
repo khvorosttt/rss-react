@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addFormInfo } from '../../sevices/features/formsSlice';
 import { ValidationError } from 'yup';
 import { convertToBase64 } from '../../utils/convertToBase64';
+import passwordStrength from '../../utils/password-strength';
 
 interface Errors {
     [key: string]: string | undefined;
@@ -84,6 +85,7 @@ export function UncontrolledForm() {
                 <input ref={passwordRef} type="password" placeholder="Password" />
             </label>
             <p className="error">{errors.password}</p>
+            <div className={`password-strength ${passwordStrength(passwordRef.current?.value)}`} />
             <label>
                 Confirm password:
                 <input ref={confirmPasswordRef} type="password" placeholder="Confirm your password" />
