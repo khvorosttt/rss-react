@@ -19,7 +19,7 @@ export const initialFormsState: IControlledState = {
 };
 
 export const FormsSlice = createSlice({
-    name: 'controlledForm',
+    name: 'Form',
     initialState: initialFormsState,
     reducers: {
         addFormInfo(state, action) {

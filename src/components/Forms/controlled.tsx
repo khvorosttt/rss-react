@@ -68,7 +68,6 @@ export default function ControlledForm() {
                     Female
                 </label>
             </label>
-            <p className="error">{errors.accept ? errors.accept.message : ''}</p>
             <label>
                 File:
                 <input type="file" {...register('image')} />
@@ -80,7 +79,7 @@ export default function ControlledForm() {
             </label>
             <datalist id="countrieslist">
                 {countries.map((country) => {
-                    return <option>{country}</option>;
+                    return <option key={country}>{country}</option>;
                 })}
             </datalist>
             <p className="error">{errors.country ? errors.country.message : ''}</p>
@@ -88,6 +87,7 @@ export default function ControlledForm() {
                 <input type="checkbox" {...register('accept')} />
                 Accept Terms and Conditions agreement
             </label>
+            <p className="error">{errors.accept ? errors.accept.message : ''}</p>
             <button type="submit" disabled={!isValid}>
                 Submit
             </button>

@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '../../App';
 import ControlledForm from '../Forms/controlled';
 import { FormsInfoList } from '../FormsInfoList/FormsInfoList';
+import { UncontrolledForm } from '../Forms/uncontrolled';
 
 const router = createBrowserRouter([
     {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'uncontrolled',
-                element: <div>Uncontrolled</div>,
+                element: <UncontrolledForm />,
             },
         ],
     },

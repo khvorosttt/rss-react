@@ -11,3 +11,7 @@
 .card img {
     border-radius: 15px;
 }
+
+.last {
+    border: 1px solid greenyellow;
+}

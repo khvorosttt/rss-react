@@ -15,7 +15,11 @@ const schema = yup.object().shape({
         .typeError('Age must be a number')
         .required('The name field is required')
         .positive('Age must be a positive number'),
-    email: yup.string().email().required(),
+    email: yup
+        .string()
+        .email()
+        .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Invalid email format')
+        .required(),
     password: yup
         .string()
         .min(8, 'Password must contain at least 8 characters')
